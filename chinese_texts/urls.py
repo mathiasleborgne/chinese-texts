@@ -19,11 +19,10 @@ from django.conf.urls import include, url, patterns
 from django.contrib import admin
 
 
-urlpatterns = patterns('texts.views',
+urlpatterns = patterns(
+    'texts.views',
     url(r'^home$', 'home'),
     url(r'^text/(?P<text_id>\d+)$', 'read'),
+    url(r'^text/(?P<text_id>\d+)$', 'read'),
+    url(r'^admin/', include(admin.site.urls)),
 )
-
-# urlpatterns = [
-#     url(r'^accueil$', 'texts.views.home'),
-# ]
