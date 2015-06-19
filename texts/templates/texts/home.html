@@ -2,14 +2,18 @@
 {% block title %}Stele Forest Home Page{% endblock %}
 {% block content %}
 
-<h2>Welcome to Stele Forest!</h2>
+<h1>Welcome to Stele Forest!</h1>
 
 {% for text in latest_texts %}
-    <div class="text">
-        <h3>{{ text.title_french }}</h3>
-        <p>{{ text.content_french|truncatewords_html:80 }}</p>
-        <p><a href="{% url "read_text" text.id %}">Lire la suite</a>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2>{{ text.title_french }} <small>{{ text.author.name_pinyin }}</small></h2>
     </div>
+    <div class="panel-body">
+        <p>{{ text.content_french|truncatewords_html:80 }}</p>
+        <a href="{% url "read_text" text.id %}">Lire la suite</a>
+    </div>
+</div>
 {% empty %}
     <p>No text to display</p>
 {% endfor %}

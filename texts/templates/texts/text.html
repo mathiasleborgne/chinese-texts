@@ -2,20 +2,28 @@
 {% block title %}Poem - {{ text.title_chinese }}{% endblock %}
 {% block content %}
 
-<div class="page-header">
-    <h1>{{ text.title_chinese }} <small>{{ text.title_french }}</small></h1>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h1>{{ text.title_chinese }} <small>{{ text.title_french }}</small></h1>
+        <h2>{{ text.author.name_chinese }} <small>{{ text.author.name_pinyin }}</small></h2>
+        {% if text.date_writing %}
+            <p>{{ text.date_writing }}</p>
+        {% endif %}
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-body"><p>{{ text.content_chinese|linebreaks }}</p></div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-body"><p>{{ text.content_french|linebreaks }}</p></div>
+                </div>
+            </div>
+        </div class="row">
+    </div>
 </div>
-<h2>{{ text.author.name_chinese }} <small>{{ text.author.name_pinyin }}</small></h2>
-{% if text.date_writing %}
-    <p>{{ text.date_writing }}</p>
-{% endif %}
-<div class="row">
-    <div class="col-sm-6">
-        <p>{{ text.content_chinese|linebreaks }}</p>
-    </div>
-    <div class="col-sm-6">
-        <p>{{ text.content_french|linebreaks }}</p>
-    </div>
-</div class="row">
 
 {% endblock %}
