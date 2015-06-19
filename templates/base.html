@@ -18,8 +18,8 @@
     <nav>
        {% block nav %}
        <ul class="list-inline">
-            <li><a href="/home">Home</a></li>
-            <li><a href="/home">Texts</a></li>
+            <li><a href="{% url "texts_list" %}">Home</a></li>
+            <li><a href="{% url "texts_list" %}">Texts</a></li>
             <li><a href="/contact">Contact</a></li>
        </ul>
        {% endblock %}

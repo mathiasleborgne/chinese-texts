@@ -8,7 +8,7 @@
     <div class="text">
         <h3>{{ text.title_french }}</h3>
         <p>{{ text.content_french|truncatewords_html:80 }}</p>
-        <p><a href="{% url "texts.views.read" text.id %}">Lire la suite</a>
+        <p><a href="{% url "read_text" text.id %}">Lire la suite</a>
     </div>
 {% empty %}
     <p>No text to display</p>
