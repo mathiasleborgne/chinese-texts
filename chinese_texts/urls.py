@@ -25,5 +25,6 @@ urlpatterns = patterns(
     url(r'^home$', TextList.as_view(), name='texts_list'),
     url(r'^text/(?P<pk>\d+)$', ReadText.as_view(), name='read_text'),
     url(r'^contact/$', 'contact'),
+    url(r'^search_texts/$', 'search_texts'),
     url(r'^admin/', include(admin.site.urls)),
 )

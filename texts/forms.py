@@ -7,3 +7,7 @@ class ContactForm(forms.Form):
     sender = forms.EmailField(label="Your mail address")
     mail_copy = forms.BooleanField(help_text="Check to get a copy of the mail",
                                    required=False)
+
+
+class SearchTextsForm(forms.Form):
+    keyword = forms.CharField()

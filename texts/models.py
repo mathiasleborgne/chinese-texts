@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models import Q
+import operator
 
 
 class Text(models.Model):
@@ -16,6 +18,18 @@ class Text(models.Model):
     def __str__(self):
         return self.title_french
 
+    @staticmethod
+    def search_texts(keyword):
+        search_fields = [
+            "content_french",
+            "content_chinese",
+            "author__name_pinyin",
+            "author__name_chinese",
+        ]
+        objects_q = [Q((search_field + "__contains", keyword))
+                     for search_field in search_fields]
+        return Text.objects.filter(reduce(operator.or_, objects_q))
+
 
 class Author(models.Model):
     name_chinese = models.CharField(max_length=42)
@@ -26,3 +40,4 @@ class Author(models.Model):
     def __str__(self):
         # todo replace by name_chinese
         return self.name_pinyin
+

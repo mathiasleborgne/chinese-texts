@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Stele Forest Search{% endblock %}
+
+{% block content %}
+    {% if was_valid_search %}
+
+        <h1>Your search matched the following texts:</h1>
+        {% for text in searched_texts %}
+            <div class="text">
+                <h3>{{ text.title_french }} <small>{{ text.author.name_pinyin }}</small></h3>
+                <a href="{% url "read_text" text.id %}">Lire la suite</a>
+            </div>
+        {% empty %}
+            <p>Sorry, no match!</p>
+        {% endfor %}
+
+    {% else %}
+
+        <form action="{% url "texts.views.search_texts" %}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit" />
+        </form>
+
+    {% endif %}
+{% endblock %}
