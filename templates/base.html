@@ -14,17 +14,20 @@
 </head>
 <body>
 <div class ="container">
-    <header>
-        <h1><span class="glyphicon glyphicon-tree-deciduous"></span>Stele Forest <small>Chinese poetry and litterature</small></h1>
-    </header>
-    <nav>
-       {% block nav %}
-       <ul class="list-inline">
+    <nav class="navbar navbar-inverse">
+        <ul class="nav navbar-nav">
+            <li><img class="img-responsive" src="{% static 'img/stele_forest_characters.jpeg' %}" alt="碑林" id="logo"></img></li>
+            <li class="active"><a href="#">Stele Forest</a></li>
             <li><a href="{% url "texts_list" %}">Home</a></li>
             <li><a href="{% url "texts_list" %}">Texts</a></li>
             <li><a href="/contact">Contact</a></li>
-       </ul>
-       {% endblock %}
+        </ul>
+        <form class="navbar-form navbar-right inline-form">
+            <div class="form-group">
+                <input type="search" class="input-sm form-control" placeholder="Search">
+                <button type="submit" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-tree-deciduous"></span> Search</button>
+            </div>
+        </form>
     </nav>
     <section id="content">
         {% block content %}{% endblock %}
