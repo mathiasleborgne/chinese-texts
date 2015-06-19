@@ -17,12 +17,12 @@ Including another URLconf
 """
 from django.conf.urls import include, url, patterns
 from django.contrib import admin
+from texts.views import TextList, ReadText
 
 
 urlpatterns = patterns(
     'texts.views',
-    url(r'^home$', 'home'),
-    url(r'^text/(?P<text_id>\d+)$', 'read'),
-    url(r'^text/(?P<text_id>\d+)$', 'read'),
+    url(r'^home$', TextList.as_view(), name='texts_list'),
+    url(r'^text/(?P<pk>\d+)$', ReadText.as_view(), name='read_text'),
     url(r'^admin/', include(admin.site.urls)),
 )
