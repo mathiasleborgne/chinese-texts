@@ -1,19 +1,21 @@
 {% extends "base.html" %}
-{% block title %}Stele Forest Home Page{% endblock %}
+{% block title %}Poem - {{ text.title_chinese }}{% endblock %}
 {% block content %}
 
-<h1>{{ text.title_french }} / {{ text.title_chinese }}</h1>
-<h2>{{ text.author.name_chinese }} ({{ text.author.name_pinyin }})</h2>
+<div class="page-header">
+    <h1>{{ text.title_chinese }} <small>{{ text.title_french }}</small></h1>
+</div>
+<h2>{{ text.author.name_chinese }} <small>{{ text.author.name_pinyin }}</small></h2>
 {% if text.date_writing %}
     <p>{{ text.date_writing }}</p>
 {% endif %}
-<section>
-    <div>
+<div class="row">
+    <div class="col-sm-6">
         <p>{{ text.content_chinese }}</p>
     </div>
-    <div>
+    <div class="col-sm-6">
         <p>{{ text.content_french }}</p>
     </div>
-</section>
+</div class="row">
 
 {% endblock %}

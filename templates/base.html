@@ -1,23 +1,33 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-   <link rel="stylesheet" href="/media/css/style.css" />
-   <title>{% block title %}Bamboo Strips{% endblock %}</title>
+    <title>
+        {% block title %}Stele Forest Home{% endblock %}
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </head>
 <body>
-<header>Chinese poetry and litterature</header>
+<div class ="container">
+    <header>
+        <h1><span class="glyphicon glyphicon-tree-deciduous"></span>Stele Forest <small>Chinese poetry and litterature</small></h1>
+    </header>
     <nav>
        {% block nav %}
-       <ul>
+       <ul class="list-inline">
             <li><a href="/">Home</a></li>
             <li><a href="/texts_list/">Texts</a></li>
             <li><a href="/contact/">Contact</a></li>
        </ul>
        {% endblock %}
-   </nav>
-   <section id="content">
-       {% block content %}{% endblock %}
-   </section>
-<footer>&copy; Mathias Le Borgne</footer>
+    </nav>
+    <section id="content">
+        {% block content %}{% endblock %}
+    </section>
+    <footer>&copy; Mathias Le Borgne 2015</footer>
+</div>
 </body>
 </html>
