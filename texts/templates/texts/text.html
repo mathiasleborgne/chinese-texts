@@ -24,7 +24,9 @@
             </div>
         </div class="row">
     </div>
-    <p><a href="{% url "update_text" text.id %}">Modify</a></p>
+    {% if user.is_authenticated %}
+        <p><a href="{% url "update_text" text.id %}">Modify</a></p>
+    {% endif %}
 </div>
 
 {% endblock %}

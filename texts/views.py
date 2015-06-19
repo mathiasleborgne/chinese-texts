@@ -1,12 +1,13 @@
 #-*- coding: utf-8 -*-
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from datetime import datetime
 from texts.models import Text
 from django.views.generic import ListView, DetailView
-from texts.forms import ContactForm, SearchTextsForm, TextForm
+from texts.forms import ContactForm, SearchTextsForm, TextForm, LoginForm
 from django.views.generic import CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse
+from django.contrib.auth import authenticate, login, logout
 
 
 template_prefix = "texts"
@@ -84,3 +85,27 @@ class TextDelete(DeleteView):
     template_name = make_template_name("delete_text")
     context_object_name = "text"
     success_url = "/home"
+
+
+def log_in(request):
+    # todo use generic view
+    error = False
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+            else:
+                error = True
+    else:
+        form = LoginForm()
+    return render(request, make_template_name("log_in"), locals())
+
+
+def log_out(request):
+    # todo use generic view
+    logout(request)
+    return redirect(reverse(log_in))

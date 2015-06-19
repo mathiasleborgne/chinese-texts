@@ -25,6 +25,8 @@ urlpatterns = patterns(
     url(r'^home$', TextList.as_view(), name='texts_list'),
     url(r'^text/(?P<pk>\d+)$', ReadText.as_view(), name='read_text'),
     url(r'^contact/$', 'contact'),
+    url(r'^log_in/$', 'log_in'),
+    url(r'^log_out/$', 'log_out'),
     url(r'^new_text/$', TextCreate.as_view(), name='new_text'),
     url(r'^update_text/(?P<pk>\d+)$', TextUpdate.as_view(),
         name='update_text'),

@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Q
+from django.contrib.auth.models import User
 import operator
 
 
@@ -41,3 +42,12 @@ class Author(models.Model):
         # todo replace by name_chinese
         return self.name_pinyin
 
+
+class Profile(models.Model):
+    user = models.OneToOneField(User)
+    user_image = models.ImageField(null=True, blank=True,
+                                   upload_to="user_images/")
+    chinese_name = models.CharField(max_length=42)
+
+    def __str__(self):
+        return "Profile for {0}".format(self.user.username)

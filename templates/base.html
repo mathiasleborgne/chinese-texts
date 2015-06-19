@@ -20,8 +20,12 @@
             <li class="active"><a href="#">Stele Forest</a></li>
             <li><a href="{% url "texts_list" %}">Texts</a></li>
             <li><a href="/search_texts">Search</a></li>
-            <li><a href="/new_text">Add Text</a></li>
-            <li><a href="/contact">Contact</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="/new_text">Add Text</a></li>
+                <li><a href="/log_out">Log Out</a></li>
+            {% else %}
+                <li><a href="/log_in">Log In</a></li>
+            {% endif %}
         </ul>
         <form class="navbar-form navbar-right inline-form" action="{% url "texts.views.search_texts" %}" method="post">
             <div class="form-group">
