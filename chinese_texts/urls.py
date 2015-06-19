@@ -21,6 +21,8 @@ from django.contrib import admin
 
 urlpatterns = patterns('texts.views',
     url(r'^accueil$', 'home'),
+    url(r'^date$', 'date_actuelle'),
+    url(r'^poem/(?P<nombre1>\d+)/(?P<nombre2>\d+)/$', 'poem'),
 )
 
 # urlpatterns = [
