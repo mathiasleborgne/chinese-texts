@@ -4,7 +4,7 @@ from django.db import models
 class Text(models.Model):
     title_french = models.CharField(max_length=100)
     title_chinese = models.CharField(max_length=100)
-    auteur = models.ForeignKey('Author')
+    author = models.ForeignKey('Author')
     content_french = models.TextField(null=True)
     content_chinese = models.TextField(null=True)
     date_release = models.DateTimeField(auto_now_add=True, auto_now=False,
