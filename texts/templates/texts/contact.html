@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Stele Forest Contact{% endblock %}
+{% if successfully_sent %}Votre message a bien été envoyé !{% endif %}
+
+{% block content %}
+
+<form action="{% url "texts.views.contact" %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit" />
+</form>
+
+{% endblock %}
