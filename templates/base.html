@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+   <link rel="stylesheet" href="/media/css/style.css" />
+   <title>{% block title %}Bamboo Strips{% endblock %}</title>
+</head>
+<body>
+<header>Chinese poetry and litterature</header>
+    <nav>
+       {% block nav %}
+       <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/texts_list/">Texts</a></li>
+            <li><a href="/contact/">Contact</a></li>
+       </ul>
+       {% endblock %}
+   </nav>
+   <section id="content">
+       {% block content %}{% endblock %}
+   </section>
+<footer>&copy; Crêpes bretonnes</footer>
+</body>
+</html>
