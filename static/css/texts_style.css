@@ -1,7 +1,6 @@
 body {
     background-image: url(../img/swirl_pattern.jpg);
 }
-}
 
 #logo, #main_title {
     display: inline-block;
@@ -19,6 +18,16 @@ body {
     height: 50px;
 }
 
+#search_button {
+    background-color: #C41B00;
+    border-color: #C41B00;
+}
+
 .inline-form input {
-  display: inline-block;
-  width: 100px;
+    display: inline-block;
+    width: 100px;
+}
+
+#panel_french, #panel_chinese {
+    font-size: 170%;
+}
