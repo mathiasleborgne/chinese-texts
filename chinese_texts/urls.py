@@ -21,7 +21,7 @@ from django.contrib import admin
 
 urlpatterns = patterns('texts.views',
     url(r'^home$', 'home'),
-    url(r'^text/(?P<text_id>\d+)$', 'text'),
+    url(r'^text/(?P<text_id>\d+)$', 'read'),
 )
 
 # urlpatterns = [
