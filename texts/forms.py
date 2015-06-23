@@ -1,4 +1,5 @@
 from django import forms
+from models import Text
 
 
 class ContactForm(forms.Form):
@@ -11,3 +12,9 @@ class ContactForm(forms.Form):
 
 class SearchTextsForm(forms.Form):
     keyword = forms.CharField()
+
+
+class TextForm(forms.ModelForm):
+    class Meta:
+        model = Text
+        exclude = ('date_release',)

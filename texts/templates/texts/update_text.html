@@ -1,0 +1,5 @@
+{% extends "create_text.html" %}
+
+{% block delete %}
+    <p><a href="{% url "delete_text" text.id %}">Delete</a></p>
+{% endblock %}
