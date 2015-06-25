@@ -35,6 +35,7 @@ urlpatterns = patterns(
     url(r'^update_text/update_success$', 'update_success'),
     url(r'^delete_text/(?P<pk>\d+)$', TextDelete.as_view(),
         name='delete_text'),
+    url(r'^about/$', 'about'),
     url(r'^search_texts/$', 'search_texts'),
     url(r'^admin/', include(admin.site.urls)),
 )

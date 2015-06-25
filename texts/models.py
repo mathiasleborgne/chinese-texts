@@ -31,6 +31,10 @@ class Text(models.Model):
                      for search_field in search_fields]
         return Text.objects.filter(reduce(operator.or_, objects_q))
 
+    @staticmethod
+    def count_texts():
+        return len(Text.objects.all())
+
 
 class Author(models.Model):
     name_chinese = models.CharField(max_length=42)

@@ -118,3 +118,8 @@ def log_out(request):
     # todo use generic view
     logout(request)
     return redirect(reverse(log_in))
+
+
+def about(request):
+    texts_count = Text.count_texts()
+    return render(request, make_template_name("about"), locals())

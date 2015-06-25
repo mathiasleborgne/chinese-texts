@@ -24,6 +24,7 @@
             {% else %}
                 <li><a href="/log_in">Log In</a></li>
             {% endif %}
+            <li><a href="/about">About</a></li>
         </ul>
         <form class="navbar-form navbar-right inline-form" action="{% url "texts.views.search_texts" %}" method="post">
             <div class="form-group">
@@ -38,7 +39,8 @@
     </section>
     <footer>
         &copy; Mathias Le Borgne 2015 -
-        <a href="/contact">Contact</a>
+        <a href="/contact">Contact</a> -
+        <a href="https://github.com/mathiasleborgne/chinese-texts">GitHub</a>
     </footer>
 </div>
 </body>
