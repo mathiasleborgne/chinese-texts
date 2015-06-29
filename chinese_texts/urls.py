@@ -17,7 +17,8 @@ Including another URLconf
 """
 from django.conf.urls import include, url, patterns
 from django.contrib import admin
-from texts.views import TextList, ReadText, TextUpdate, TextCreate, TextDelete
+from texts.views import TextList, ReadText, TextUpdate, TextCreate, \
+    TextDelete, AuthorCreate
 
 
 urlpatterns = patterns(
@@ -28,6 +29,7 @@ urlpatterns = patterns(
     url(r'^log_in/$', 'log_in'),
     url(r'^log_out/$', 'log_out'),
     url(r'^new_text/$', TextCreate.as_view(), name='new_text'),
+    url(r'^create_author/$', AuthorCreate.as_view(), name='create_author'),
     url(r'^update_text/(?P<pk>\d+)$', TextUpdate.as_view(),
         name='update_text'),
     url(r'^update_text/update_success$', 'update_success'),

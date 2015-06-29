@@ -2,9 +2,10 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from datetime import datetime
-from texts.models import Text
+from texts.models import Text, Author
 from django.views.generic import ListView, DetailView
-from texts.forms import ContactForm, SearchTextsForm, TextForm, LoginForm
+from texts.forms import ContactForm, SearchTextsForm, TextForm, LoginForm, \
+    AuthorForm
 from django.views.generic import CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate, login, logout
@@ -84,6 +85,14 @@ class TextDelete(DeleteView):
     model = Text
     template_name = make_template_name("delete_text")
     context_object_name = "text"
+    success_url = "/home"
+
+
+class AuthorCreate(CreateView):
+    model = Author
+    template_name = make_template_name("create_author")
+    context_object_name = "author"
+    form_class = AuthorForm
     success_url = "/home"
 
 

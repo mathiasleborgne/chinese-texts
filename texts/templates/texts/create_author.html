@@ -1,19 +1,12 @@
 {% extends "base.html" %}
-{% block title %}Update Text{% endblock %}
+{% block title %}Create Author{% endblock %}
 
 {% block content %}
-
-{% block create_author %}
-    <p><a href="{% url "create_author" %}">Add an Author</a></p>
-{% endblock %}
 
 <form action="" method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Submit" />
 </form>
-
-{% block delete %}
-{% endblock %}
 
 {% endblock %}

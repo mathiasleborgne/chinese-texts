@@ -1,5 +1,5 @@
 from django import forms
-from models import Text
+from models import Text, Author
 
 
 class ContactForm(forms.Form):
@@ -18,6 +18,12 @@ class TextForm(forms.ModelForm):
     class Meta:
         model = Text
         exclude = ('date_release',)
+
+
+class AuthorForm(forms.ModelForm):
+    class Meta:
+        model = Author
+        exclude = ()
 
 
 class LoginForm(forms.Form):
