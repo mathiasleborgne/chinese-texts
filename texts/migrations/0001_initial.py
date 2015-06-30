@@ -24,9 +24,9 @@ class Migration(migrations.Migration):
             name='Text',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('title_french', models.CharField(max_length=100)),
+                ('title_english', models.CharField(max_length=100)),
                 ('title_chinese', models.CharField(max_length=100)),
-                ('content_french', models.TextField(null=True)),
+                ('content_english', models.TextField(null=True)),
                 ('content_chinese', models.TextField(null=True)),
                 ('date_release', models.DateTimeField(auto_now_add=True, verbose_name=b'Release Date')),
                 ('date_writing', models.DateTimeField(null=True, verbose_name=b'Writing Date')),

@@ -7,10 +7,10 @@
 {% for text in latest_texts %}
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h2>{{ text.title_french }} <small>{{ text.author.name_pinyin }}</small></h2>
+        <h2>{{ text.title_english }} <small>{{ text.author.name_pinyin }}</small></h2>
     </div>
     <div class="panel-body">
-        <p>{{ text.content_french|truncatewords_html:80 }}</p>
+        <p>{{ text.content_english|truncatewords_html:80 }}</p>
         <a href="{% url "read_text" text.id %}">Lire la suite</a>
     </div>
 </div>

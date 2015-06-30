@@ -4,7 +4,7 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h1>{{ text.title_chinese }} <small>{{ text.title_french }}</small></h1>
+        <h1>{{ text.title_chinese }} <small>{{ text.title_english }}</small></h1>
         <h2>{{ text.author.name_chinese }} <small>{{ text.author.name_pinyin }}</small></h2>
         {% if text.date_writing %}
             <p>{{ text.date_writing }}</p>
@@ -18,8 +18,8 @@
                 </div>
             </div>
             <div class="col-sm-9">
-                <div class="panel panel-default" id="panel_french">
-                    <div class="panel-body"><p>{{ text.content_french|linebreaks }}</p></div>
+                <div class="panel panel-default" id="panel_english">
+                    <div class="panel-body"><p>{{ text.content_english|linebreaks }}</p></div>
                 </div>
             </div>
         </div class="row">

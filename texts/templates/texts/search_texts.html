@@ -7,7 +7,7 @@
         <h1>Your search matched the following texts:</h1>
         {% for text in searched_texts %}
             <div class="text">
-                <h3>{{ text.title_french }} <small>{{ text.author.name_pinyin }}</small></h3>
+                <h3>{{ text.title_english }} <small>{{ text.author.name_pinyin }}</small></h3>
                 <a href="{% url "read_text" text.id %}">Lire la suite</a>
             </div>
         {% empty %}

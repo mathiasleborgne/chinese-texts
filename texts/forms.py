@@ -17,7 +17,8 @@ class SearchTextsForm(forms.Form):
 class TextForm(forms.ModelForm):
     class Meta:
         model = Text
-        exclude = ('date_release',)
+        exclude = ('date_release', 'date_writing',
+                   'content_pinyin', 'title_pinyin')
 
 
 class AuthorForm(forms.ModelForm):
