@@ -23,6 +23,7 @@ from texts.views import TextList, ReadText, TextUpdate, TextCreate, \
 
 urlpatterns = patterns(
     'texts.views',
+    url(r'^$', TextList.as_view(), name='texts_list'),
     url(r'^home$', TextList.as_view(), name='texts_list'),
     url(r'^text/(?P<pk>\d+)$', ReadText.as_view(), name='read_text'),
     url(r'^contact/$', 'contact'),
