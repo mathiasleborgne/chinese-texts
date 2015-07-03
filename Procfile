@@ -1,0 +1,1 @@
+web: gunicorn chinese_texts.wsgi --log-file -

@@ -12,21 +12,30 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import dj_database_url
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '9(gz!=#8md@@05w7t)9e(j+uatd+=w2s35hh5w9xb2r_k!1xy*'
+SECRET_KEY = 'du^ocg1a^x!f**3=0)0(#qn-pwff2_th+o7wh0#*wgew5!8c5crdfu'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+TEMPLATE_DEBUG = False
 
-ALLOWED_HOSTS = []
 
+# Allow all host headers
+ALLOWED_HOSTS = ['*']
+
+# ALLOWED_HOSTS = [
+#     'steleforest.ovh',
+#     'www.steleforest.ovh',
+# ]
 
 # Application definition
 
@@ -49,6 +58,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'django.middleware.common.BrokenLinkEmailsMiddleware',  # emails for 404
 )
 
 ROOT_URLCONF = 'chinese_texts.urls'
@@ -76,17 +86,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'chinese_texts.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
+# Heroku: Parse database configuration from $DATABASE_URL
+DATABASES = {'default': dj_database_url.config()}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -105,8 +109,31 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
+# Static asset configuration
+STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+
+ADMINS = (
+    ('Mathias Le Borgne', 'mathias.leborgne@gmail.com'),
+)
+# TODO: check sensitive information, hide them in mails
+MANAGERS = ADMINS
+SEND_BROKEN_LINK_EMAILS = True
+
+# # filter 404 notifications:
+# import re
+# IGNORABLE_404_URLS = (
+#     re.compile(r'\.(php|cgi)$'),
+#     re.compile(r'^/phpmyadmin/'),
+#     re.compile(r'^/apple-touch-icon.*\.png$'),
+#     re.compile(r'^/favicon\.ico$'),
+#     re.compile(r'^/robots\.txt$'),
+# )
+
+
+# Honor the 'X-Forwarded-Proto' header for request.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
