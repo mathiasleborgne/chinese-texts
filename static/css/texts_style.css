@@ -31,3 +31,7 @@ body {
 #panel_english, #panel_chinese {
     font-size: 170%;
 }
+
+footer {
+    font-size: 80%;
+}
