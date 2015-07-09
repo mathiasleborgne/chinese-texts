@@ -8,7 +8,7 @@
         {% for text in searched_texts %}
             <div class="text">
                 <h3>{{ text.title_english }} <small>{{ text.author.name_pinyin }}</small></h3>
-                <a href="{% url "read_text" text.id %}">Lire la suite</a>
+                <a href="{% url "read_text" text.id %}">Read</a>
             </div>
         {% empty %}
             <p>Sorry, no match!</p>
