@@ -31,6 +31,25 @@ class ReadText(DetailView):
     template_name = make_template_name("text")
 
 
+class AuthorList(ListView):
+    model = Author
+    context_object_name = "authors"
+    template_name = make_template_name("authors")
+
+
+class AuthorView(DetailView):
+    context_object_name = "author"
+    model = Author
+    template_name = make_template_name("author_texts")
+
+    def get_context_data(self, **kwargs):
+        context = super(AuthorView, self).get_context_data(**kwargs)
+        author = self.get_object()
+        print author
+        context['texts'] = Text.objects.filter(author=author)
+        return context
+
+
 def contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
@@ -55,6 +74,12 @@ def search_texts(request):
             searched_texts = Text.search_texts(keyword)
     else:
         form = SearchTextsForm()
+    return render(request, make_template_name("search_texts"), locals())
+
+
+def author_texts(request):
+    # todo get the request author and filter
+    texts = Text.objects.filter(author=author)[0]
     return render(request, make_template_name("search_texts"), locals())
 
 
