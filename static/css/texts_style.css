@@ -14,13 +14,21 @@ body {
     background-color: rgba(255, 255, 255, 0.65);
 }
 
-.panel > .panel-heading{
+.panel > .panel-heading {
     background-image: none;
     background-color: rgba(200, 200, 200, 0.05);
 }
 
+.list-group-item a, .panel > .panel-heading a {
+    color: #666666;
+}
+
 .badge {
-    background-color: rgba(100, 100, 100, 0.2);
+    background-color: #C41B00;
+}
+
+.badge a {
+    color: #FFFFFF;
 }
 
 #logo {
