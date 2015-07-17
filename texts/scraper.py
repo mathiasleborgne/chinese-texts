@@ -76,29 +76,6 @@ def parse_html(url):
         print "parsing problem for url:", url, " / error:", error
 
 
-def get_pretty_content_du(title_english, content_english, content_chinese,
-                          content_pinyin):
-
-    (title_chinese, title_pinyin) = get_titles_content_du(content_chinese,
-                                                          content_pinyin)
-    content_english_pretty = pretty_content_du(content_english, False)
-    content_chinese_pretty = pretty_content_du(content_chinese, True)
-    content_pinyin_pretty = pretty_content_du(content_pinyin, True)
-
-    if not check_length(title_english,
-                        content_english_pretty, content_chinese_pretty):
-        content_chinese_pretty = pretty_content_du(content_chinese, True, True)
-        if check_length(title_english,
-                        content_english_pretty, content_chinese_pretty):
-            print "Successfully resized chinese content"
-        else:
-            raise RuntimeError("Bad alignment")
-
-    return (title_chinese, title_pinyin,
-            content_english_pretty, content_chinese_pretty,
-            content_pinyin_pretty)
-
-
 def make_text(title_english, content_english, content_chinese, content_pinyin):
     author = get_du_fu()
     if fill_db:
@@ -143,6 +120,29 @@ def make_text(title_english, content_english, content_chinese, content_pinyin):
             text.save()
         except DataError, error:
             print "DB error, couldn't save text:", title_english, "-", error
+
+
+def get_pretty_content_du(title_english, content_english, content_chinese,
+                          content_pinyin):
+
+    (title_chinese, title_pinyin) = get_titles_content_du(content_chinese,
+                                                          content_pinyin)
+    content_english_pretty = pretty_content_du(content_english, False)
+    content_chinese_pretty = pretty_content_du(content_chinese, True)
+    content_pinyin_pretty = pretty_content_du(content_pinyin, True)
+
+    if not check_length(title_english,
+                        content_english_pretty, content_chinese_pretty):
+        content_chinese_pretty = pretty_content_du(content_chinese, True, True)
+        if check_length(title_english,
+                        content_english_pretty, content_chinese_pretty):
+            print "Successfully resized chinese content"
+        else:
+            raise RuntimeError("Bad alignment")
+
+    return (title_chinese, title_pinyin,
+            content_english_pretty, content_chinese_pretty,
+            content_pinyin_pretty)
 
 
 def get_titles_content_du(content_chinese, content_pinyin):
