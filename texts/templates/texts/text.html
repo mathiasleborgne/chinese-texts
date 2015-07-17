@@ -5,10 +5,7 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <h1>{{ text.title_chinese }} <small>{{ text.title_english }}</small></h1>
-        <h2>{{ text.author.name_chinese }} <small>{{ text.author.name_pinyin }}</small></h2>
-        {% if text.date_writing %}
-            <p>{{ text.date_writing }}</p>
-        {% endif %}
+        <h2>{{ text.author.name_chinese }} <small><a href="{% url "author_texts" text.author.id %}">{{ text.author.name_pinyin }}</a></small></h2>
     </div>
     <div class="panel-body">
         <div class="row">

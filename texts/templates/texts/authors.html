@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Authors{% endblock %}
+{% block content %}
+
+<h1>All Authors</h1>
+
+<ul class="list-group">
+{% for author in authors %}
+  <li class="list-group-item">
+    <!-- <span class="badge">0</span> -->
+    <!-- TODO nomber of texts -->
+    <a href="{% url "author_texts" author.id %}">{{ author.name_pinyin }}</a>
+    <small>{{ author.name_chinese }}</small>
+  </li>
+{% empty %}
+    <p>No author to display</p>
+{% endfor %}
+</ul>
+
+{% endblock %}

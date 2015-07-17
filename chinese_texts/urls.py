@@ -18,7 +18,7 @@ Including another URLconf
 from django.conf.urls import include, url, patterns
 from django.contrib import admin
 from texts.views import TextList, ReadText, TextUpdate, TextCreate, \
-    TextDelete, AuthorCreate
+    TextDelete, AuthorCreate, AuthorList, AuthorView
 
 
 urlpatterns = patterns(
@@ -26,6 +26,8 @@ urlpatterns = patterns(
     url(r'^$', TextList.as_view(), name='texts_list'),
     url(r'^home$', TextList.as_view(), name='texts_list'),
     url(r'^text/(?P<pk>\d+)$', ReadText.as_view(), name='read_text'),
+    url(r'^authors$', AuthorList.as_view(), name='authors'),
+    url(r'^author/(?P<pk>\d+)$', AuthorView.as_view(), name='author_texts'),
     url(r'^contact/$', 'contact'),
     url(r'^log_in/$', 'log_in'),
     url(r'^log_out/$', 'log_out'),
