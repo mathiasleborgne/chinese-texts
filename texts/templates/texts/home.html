@@ -4,18 +4,16 @@
 
 <h1>Welcome to Stele Forest!</h1>
 
+<ul class="list-group">
 {% for text in latest_texts %}
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h2>{{ text.title_english }} <small>{{ text.author.name_pinyin }}</small></h2>
-    </div>
-    <div class="panel-body">
-        <p>{{ text.content_english|truncatewords_html:20 }}</p>
-        <a href="{% url "read_text" text.id %}">Read</a>
-    </div>
-</div>
+    <li class="list-group-item">
+        <span class="badge"><a href="{% url "read_text" text.id %}">Read</a></span>
+        <h3 class="list-group-item-heading"><a href="{% url "read_text" text.id %}">{{ text.title_english }}</a> <small>{{ text.author.name_pinyin }}</small></h3>
+        <p class="list-group-item-text">{{ text.content_english|truncatewords_html:20|linebreaks }}</p>
+    </li>
 {% empty %}
     <p>No text to display</p>
 {% endfor %}
+</ul>
 
 {% endblock %}
