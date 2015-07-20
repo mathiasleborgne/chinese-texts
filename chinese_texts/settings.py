@@ -66,6 +66,7 @@ ROOT_URLCONF = 'chinese_texts.urls'
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
     os.path.join(BASE_DIR, 'texts/templates/texts'),
+    os.path.join(BASE_DIR, 'texts/templates/user_templates'),
 )
 
 TEMPLATES = [
@@ -104,6 +105,10 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+LOGIN_REDIRECT_URL = "/home/"
+
+LOGIN_URL = "/log_in/"
 
 
 # Static files (CSS, JavaScript, Images)
