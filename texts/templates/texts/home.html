@@ -2,7 +2,7 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
-<h1>Welcome to Stele Forest!</h1>
+<h1>Welcome to Stele Forest{% if user.is_authenticated %} {{ user.username }}{% endif %}!</h1>
 
 <ul class="list-group">
 {% for text in latest_texts %}

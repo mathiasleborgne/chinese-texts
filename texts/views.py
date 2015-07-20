@@ -1,14 +1,17 @@
 #-*- coding: utf-8 -*-
-from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404, redirect, \
+    render_to_response
 from datetime import datetime
 from texts.models import Text, Author
+from django.contrib.auth.models import User
 from django.views.generic import ListView, DetailView
 from texts.forms import ContactForm, SearchTextsForm, TextForm, LoginForm, \
-    AuthorForm
+    AuthorForm, UserCreationMailForm
 from django.views.generic import CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate, login, logout
+from django.template import RequestContext
 
 
 template_prefix = "texts"
@@ -118,6 +121,17 @@ class AuthorCreate(CreateView):
     context_object_name = "author"
     form_class = AuthorForm
     success_url = "/home"
+
+
+class UserCreate(CreateView):
+    model = User
+    template_name = make_template_name("create_user")
+    context_object_name = "user"
+    form_class = UserCreationMailForm
+    success_url = "/create_user_success"  # todo: "welcome, user!" page
+
+def create_user_success(request):
+    return render(request, make_template_name('create_user_success'), locals())
 
 
 def log_in(request):
