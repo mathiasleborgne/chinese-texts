@@ -17,6 +17,9 @@ Including another URLconf
 """
 from django.conf.urls import include, url, patterns
 from django.contrib import admin
+from django.contrib.auth.views import password_change, password_change_done, \
+    password_reset, password_reset_done, password_reset_confirm, \
+    password_reset_complete, logout_then_login
 from texts.views import TextList, ReadText, TextUpdate, TextCreate, \
     TextDelete, AuthorCreate
 
@@ -39,4 +42,20 @@ urlpatterns = patterns(
     url(r'^about/$', 'about'),
     url(r'^search_texts/$', 'search_texts'),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^logout_then_login$', logout_then_login, ),
+    url(r'^password_change$', password_change,
+        {'template_name': 'user_templates/password_change.html',
+         'post_change_redirect': '/password_change_done'}),
+    url(r'^password_change_done$', password_change_done,
+        {'template_name': 'user_templates/password_change_done.html', }),
+    url(r'^password_reset$', password_reset,
+        {'template_name': 'user_templates/password_reset.html',
+         'post_reset_redirect': '/password_reset_done'}),
+    url(r'^password_reset_done$', password_reset_done,
+        {'template_name': 'user_templates/password_reset_done.html', }),
+    url(r'^password_reset_confirm$', password_reset_confirm,
+        {'template_name': 'user_templates/password_reset_confirm.html', }),
+    url(r'^password_reset_complete$', password_reset_complete,
+        {'template_name': 'user_templates/password_reset_complete.html', }),
+
 )
