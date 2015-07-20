@@ -41,6 +41,7 @@ urlpatterns = patterns(
         name='delete_text'),
     url(r'^about/$', 'about'),
     url(r'^search_texts/$', 'search_texts'),
+    url(r'^comments/', include('django.contrib.comments.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^logout_then_login$', logout_then_login, ),
     url(r'^password_change$', password_change,
