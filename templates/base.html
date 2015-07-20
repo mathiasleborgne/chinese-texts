@@ -21,7 +21,9 @@
             <li><a href="/authors">Authors</a></li>
             {% if user.is_authenticated %}
                 <li><a href="/new_text">Add Text</a></li>
-                <li><a href="/log_out">Log Out</a></li>
+                <li><a href="/logout_then_login">Log Out</a></li>
+                <li><a href="/password_change">Change Password</a></li>
+                <li><a href="/password_reset">Reset Password</a></li>
             {% else %}
                 <li><a href="/log_in">Log In</a></li>
             {% endif %}
