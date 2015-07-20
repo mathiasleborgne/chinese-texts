@@ -21,7 +21,7 @@ from django.contrib.auth.views import password_change, password_change_done, \
     password_reset, password_reset_done, password_reset_confirm, \
     password_reset_complete, logout_then_login
 from texts.views import TextList, ReadText, TextUpdate, TextCreate, \
-    TextDelete, AuthorCreate, AuthorList, AuthorView
+    TextDelete, AuthorCreate, AuthorList, AuthorView, UserCreate
 
 
 urlpatterns = patterns(
@@ -32,6 +32,8 @@ urlpatterns = patterns(
     url(r'^authors$', AuthorList.as_view(), name='authors'),
     url(r'^author/(?P<pk>\d+)$', AuthorView.as_view(), name='author_texts'),
     url(r'^contact/$', 'contact'),
+    url(r'^create_user/$', UserCreate.as_view(), name='create_user'),
+    url(r'^create_user_success/$', 'create_user_success', name='create_user_success'),
     url(r'^log_in/$', 'log_in'),
     url(r'^log_out/$', 'log_out'),
     url(r'^new_text/$', TextCreate.as_view(), name='new_text'),

@@ -20,12 +20,20 @@
             <li class="active"><a href="{% url "texts_list" %}">Stele Forest</a></li>
             <li><a href="/authors">Authors</a></li>
             {% if user.is_authenticated %}
-                <li><a href="/new_text">Add Text</a></li>
-                <li><a href="/logout_then_login">Log Out</a></li>
-                <li><a href="/password_change">Change Password</a></li>
-                <li><a href="/password_reset">Reset Password</a></li>
+            <li><a href="/new_text">Add Text</a></li>
+
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Account <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/password_change">Change Password</a></li>
+                    <li><a href="/password_reset">Reset Password</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="/logout_then_login">Log Out</a></li>
+                </ul>
+            </li>
             {% else %}
                 <li><a href="/log_in">Log In</a></li>
+                <li><a href="/create_user">Sign Up</a></li>
             {% endif %}
             <li><a href="/about">About</a></li>
         </ul>
