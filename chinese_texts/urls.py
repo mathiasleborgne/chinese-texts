@@ -30,7 +30,7 @@ urlpatterns = patterns(
     url(r'^home$', TextList.as_view(), name='texts_list'),
     url(r'^text/(?P<pk>\d+)$', ReadText.as_view(), name='read_text'),
     url(r'^authors$', AuthorList.as_view(), name='authors'),
-    url(r'^author/(?P<pk>\d+)$', AuthorView.as_view(), name='author_texts'),
+    url(r'^author_page/(?P<pk>\d+)$', AuthorView.as_view(), name='author_page'),
     url(r'^contact/$', 'contact'),
     url(r'^create_user/$', UserCreate.as_view(), name='create_user'),
     url(r'^create_user_success/$', 'create_user_success', name='create_user_success'),

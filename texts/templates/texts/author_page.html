@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Poem - {{ text.title_chinese }}{% endblock %}
+{% block content %}
+
+<h2>{{ author.name_chinese }} <small>{{ author.name_pinyin }}</small></h2>
+
+<ul class="list-group">
+{% for text in texts %}
+    <li class="list-group-item">
+        <span class="badge"><a href="{% url "read_text" text.id %}">Read</a></span>
+        <a href="{% url "read_text" text.id %}">{{ text.title_english }}</a>
+    </li>
+{% empty %}
+    <p>No text to display</p>
+{% endfor %}
+</ul>
+
+{% endblock %}
