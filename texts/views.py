@@ -42,7 +42,7 @@ class AuthorList(ListView):
 class AuthorView(DetailView):
     context_object_name = "author"
     model = Author
-    template_name = make_template_name("author_texts")
+    template_name = make_template_name("author_page")
 
     def get_context_data(self, **kwargs):
         context = super(AuthorView, self).get_context_data(**kwargs)
@@ -79,7 +79,7 @@ def search_texts(request):
     return render(request, make_template_name("search_texts"), locals())
 
 
-def author_texts(request):
+def author_page(request):
     # todo get the request author and filter
     texts = Text.objects.filter(author=author)[0]
     return render(request, make_template_name("search_texts"), locals())
