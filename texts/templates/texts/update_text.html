@@ -1,8 +1,12 @@
-{% extends "create_text.html" %}
+{% extends "base.html" %}
 
-{% block create_author %}
-{% endblock %}
+{% load crispy_forms_tags %}
 
-{% block delete %}
-    <p><a href="{% url "delete_text" text.id %}">Delete</a></p>
+{% block title %}Update Text{% endblock %}
+
+{% block content %}
+
+{% crispy form form.helper %}
+<p><a href="{% url "delete_text" text.id %}">Delete</a></p>
+
 {% endblock %}

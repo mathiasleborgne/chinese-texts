@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
 {% block title %}Log in{% endblock %}
 {% block content %}
 
@@ -9,13 +12,9 @@
 {% endif %}
 
 {% if user.is_authenticated %}
-You are connected, {{ user.username }}!
+    You are connected, {{ user.username }}!
 {% else %}
-<form method="post" action=".">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Log In" />
-</form>
+    {% crispy form %}
 {% endif %}
 
 {% endblock %}
