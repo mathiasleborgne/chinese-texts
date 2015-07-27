@@ -85,6 +85,9 @@ class CharData(object):
 class Author(models.Model):
     name_chinese = models.CharField(max_length=42)
     name_pinyin = models.CharField(max_length=42)
+    year_birth = models.CharField(null=True, max_length=100)
+    year_death = models.CharField(null=True, max_length=100)
+    biography = models.TextField(null=True)
 
     def __str__(self):
         # todo replace by name_chinese

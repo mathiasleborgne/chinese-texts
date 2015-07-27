@@ -2,7 +2,21 @@
 {% block title %}Poem - {{ text.title_chinese }}{% endblock %}
 {% block content %}
 
-<h2>{{ author.name_chinese }} <small>{{ author.name_pinyin }}</small></h2>
+<h2>
+    {{ author.name_chinese }}
+    <small>{{ author.name_pinyin }}
+    {% if author.biography %} {{ author.year_birth }} - {{ author.year_death }}{% endif %}
+    </small>
+</h2>
+
+{% if author.biography %}
+    <p>
+        {{ author.biography }} <br>
+        <small>(Source: wikipedia)</small>
+    </p>
+{% endif %}
+
+<h2>Texts:</h2>
 
 <ul class="list-group">
 {% for text in texts %}
