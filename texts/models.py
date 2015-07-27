@@ -41,8 +41,6 @@ class Text(models.Model):
 class Author(models.Model):
     name_chinese = models.CharField(max_length=42)
     name_pinyin = models.CharField(max_length=42)
-    year_birth = models.IntegerField(null=True)
-    year_death = models.IntegerField(null=True)
 
     def __str__(self):
         # todo replace by name_chinese
