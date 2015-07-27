@@ -3,6 +3,7 @@
 {% block content %}
 
 <h1>Welcome to Stele Forest{% if user.is_authenticated %} {{ user.username }}{% endif %}!</h1>
+<p>Here you will find some classical chinese texts. You can even add your own!</p>
 
 <ul class="list-group">
 {% for text in latest_texts %}

@@ -96,3 +96,10 @@ class UserCreationMailForm(UserCreationForm):
     class Meta:
         model = User
         fields = ("username", 'email')
+
+    def __init__(self, *args, **kwargs):
+        super(UserCreationMailForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.form_action = ""
+        self.helper.add_input(Submit('submit', 'Submit'))

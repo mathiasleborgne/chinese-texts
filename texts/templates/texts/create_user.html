@@ -1,12 +1,15 @@
 {% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
 {% block title %}Sign up{% endblock %}
 
 {% block content %}
 
-<form method="POST" action="">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit" />
-</form>
+<h2>Sign up</h2>
+<p>Why signing up? you can add texts, edit them, leave some comments, and a lot more to come.</p>
+
+{% crispy form %}
 
 {% endblock %}
+
