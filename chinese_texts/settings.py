@@ -24,9 +24,18 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'du^ocg1a^x!f**3=0)0(#qn-pwff2_th+o7wh0#*wgew5!8c5crdfu'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-TEMPLATE_DEBUG = False
+# settings.py
+
+import socket
+
+machine_name = 'ALD-0986-DE'
+is_local_machine = socket.gethostname() == machine_name
+
+if is_local_machine:
+    print "You're running in local on machine:", machine_name
+    DEBUG = TEMPLATE_DEBUG = True
+else:
+    DEBUG = TEMPLATE_DEBUG = False
 
 
 # Allow all host headers
@@ -95,7 +104,17 @@ WSGI_APPLICATION = 'chinese_texts.wsgi.application'
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 # Heroku: Parse database configuration from $DATABASE_URL
-DATABASES = {'default': dj_database_url.config()}
+if is_local_machine:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+else:
+    DATABASES = {'default': dj_database_url.config()}
+
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
