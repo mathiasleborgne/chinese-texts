@@ -29,7 +29,7 @@ SECRET_KEY = 'du^ocg1a^x!f**3=0)0(#qn-pwff2_th+o7wh0#*wgew5!8c5crdfu'
 import socket
 
 machine_name = 'ALD-0986-DE'
-is_local_machine = socket.gethostname() == machine_name
+is_local_machine = socket.gethostname() == machine_name  # debug vs prod
 
 if is_local_machine:
     print "You're running in local on machine:", machine_name
