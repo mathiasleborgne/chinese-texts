@@ -84,6 +84,9 @@ def make_text_metadata(text, fill_db, all_characters):
         print
         print "Erasing data for text:", text.title_english
         text.chars_data = None
+    except IndexError, error:
+        print "Got an unexpected character in text:", text.title_english, \
+            "; parsing on!"
 
 
 if __name__ == "__main__":

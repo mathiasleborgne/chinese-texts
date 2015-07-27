@@ -4,26 +4,42 @@ import os
 import urllib2
 from bs4 import BeautifulSoup
 from django.db.utils import DataError
+import argparse
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'chinese_texts.settings'
 from texts.models import Text, Author
 import django
 django.setup()
 
-debug = True
-few_texts = False  # run the script on a few texts, to avoid flooding the db
-fill_db = True
+
+def get_parser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--many_items",
+                        action="store_true",
+                        help="Run test on many items")
+    parser.add_argument("--fill_db",
+                        action="store_true",
+                        help="Actually change the database")
+    return parser
+
+def get_texts_parser():
+    parser = get_parser()
+    parser.add_argument("--dufu",
+                        action="store_true",
+                        help="Parse the du fu site instead of the wengu site")
+    return parser
 
 
 class TextScraper(object):
     """ abstract class for scraping
     """
 
-    def __init__(self):
+    def __init__(self, args):
         super(TextScraper, self).__init__()
+        self.args = args
         print "Find all URLs"
         poem_urls = self.get_all_poems_urls()
-        if few_texts:
+        if not self.args.many_items:
             poem_urls = poem_urls[:3]
         print "parsing", len(poem_urls), "urls"
         for poem_url in poem_urls:
@@ -39,7 +55,7 @@ class TextScraper(object):
             except RuntimeError, error:
                 continue
             self.print_info()
-            if fill_db:
+            if self.args.fill_db:
                 self.add_text_to_db()
 
 
@@ -66,24 +82,24 @@ class TextScraper(object):
         pass
 
     def print_info(self):
-        if fill_db:
+        if self.args.fill_db:
             print "title:", self.title_english
             print "content:", (self.content_english_pretty[:20] + "...") \
-                if fill_db else self.content_english_pretty
+                if self.args.fill_db else self.content_english_pretty
         else:
             print
             print "content english:", self.content_english_pretty
-            print
+            print "-"
             print "content english raw:", self.content_english_raw
-            print
+            print "-"
             print "content chinese:", self.content_chinese_pretty
-            print
+            print "-"
             print "content chinese raw:", self.content_chinese_raw
-            print
+            print "-"
             print "content pinyin:", self.content_pinyin_pretty
-            print
+            print "-"
             print "content pinyin raw:", self.content_pinyin_raw
-            print
+            print "-"
 
 
     def get_author(self):
@@ -132,7 +148,7 @@ class WenguScraper(TextScraper):
 
     def print_info(self):
         super(WenguScraper, self).print_info()
-        if fill_db:
+        if self.args.fill_db:
             print "Author:"
             print "  name_pinyin:", self.name_pinyin
             print "  name_chinese:", self.name_chinese
@@ -277,5 +293,8 @@ def remove_text_duplicate(title_english):
         text.delete()
 
 
-print "running"
-scraper = WenguScraper()
+if __name__ == "__main__":
+    print "running scraper"
+    args = get_texts_parser().parse_args()
+    ScraperClass = DuFuScraper if args.dufu else WenguScraper
+    scraper = ScraperClass(args)
