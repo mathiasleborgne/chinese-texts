@@ -17,6 +17,9 @@ class Text(models.Model):
     date_writing = models.DateTimeField(auto_now_add=False, auto_now=False,
                                         null=True,
                                         verbose_name="Writing Date")
+    chars_data = models.TextField(null=True) # JSON-serialized (text) version of your list
+    # see explanation for JSON serialization here:
+    # http://stackoverflow.com/questions/1110153/what-is-the-most-efficent-way-to-store-a-list-in-the-django-models
 
     def __str__(self):
         return self.title_english
@@ -36,6 +39,47 @@ class Text(models.Model):
     @staticmethod
     def count_texts():
         return len(Text.objects.all())
+
+
+class CharData(object):
+    """Metadata for chinese character
+       We don't do the parsing here to avoid too heavy dependency
+       between this storage class and the parsing system
+    """
+
+    def __init__(self, character, translation, pinyin):
+        super(CharData, self).__init__()
+        self.character = character
+        self.is_line_break = character == "\n"
+        if self.is_line_break:
+            self.translation = None
+            self.pinyin = None
+        else:
+            self.translation = translation
+            self.pinyin = pinyin
+
+    @classmethod
+    def from_json(cls, item_json):
+        "Initialize CharData from a json serialization"
+        character = item_json[0]
+        if len(item_json) == 1:
+            translation = None
+            pinyin = None
+        else:
+            translation = item_json[1]
+            pinyin = item_json[2]
+        return cls(character, translation, pinyin)
+
+    @classmethod
+    def from_line_break(cls):
+        return cls("\n", None, None)
+
+    def get_JSONable_item(self):
+        if self.is_line_break:
+            return [self.character]
+        else:
+            return [self.character, self.translation, self.pinyin]
+
 
 
 class Author(models.Model):

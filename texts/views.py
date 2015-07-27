@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect, \
     render_to_response
 from datetime import datetime
-from texts.models import Text, Author
+from texts.models import Text, Author, CharData
 from django.contrib.auth.models import User
 from django.views.generic import ListView, DetailView
 from texts.forms import ContactForm, SearchTextsForm, TextForm, LoginForm, \
@@ -12,7 +12,7 @@ from django.views.generic import CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
-
+import json
 
 template_prefix = "texts"
 
@@ -31,6 +31,18 @@ class ReadText(DetailView):
     context_object_name = "text"
     model = Text
     template_name = make_template_name("text")
+
+    def get_context_data(self, **kwargs):
+        context = super(ReadText, self).get_context_data(**kwargs)
+        # decode metadata
+        text = self.get_object()
+        chars_data_json = text.chars_data
+        json_decoder = json.decoder.JSONDecoder()
+        if chars_data_json is not None:
+            chars_data = [CharData.from_json(char_data_raw) for char_data_raw
+                          in json_decoder.decode(chars_data_json)]
+            context['chars_data_decoded'] = chars_data
+        return context
 
 
 class AuthorList(ListView):

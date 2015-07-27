@@ -6,12 +6,30 @@
     <div class="panel-heading">
         <h1>{{ text.title_chinese }} <small>{{ text.title_english }}</small></h1>
         <h2>{{ text.author.name_chinese }} <small><a href="{% url "author_page" text.author.id %}">{{ text.author.name_pinyin }}</a></small></h2>
+
     </div>
     <div class="panel-body">
         <div class="row">
             <div class="col-sm-3">
                 <div class="panel panel-default" id="panel_chinese">
-                    <div class="panel-body"><p>{{ text.content_chinese|linebreaks }}</p></div>
+                    <div class="panel-body">
+                        <p>
+                            {% if not text.chars_data %}
+                                {{ text.content_chinese|linebreaks }}
+                            {% else %}
+                                {% for char_data in chars_data_decoded %}
+                                    {% if char_data.is_line_break %}
+                                        <br>
+                                    {% else %}
+                                        <span data-toggle="popover" data-trigger="hover" data-placement="top"
+                                         title="{{char_data.translation}}" data-content="{{char_data.pinyin}}">
+                                            {{char_data.character}}
+                                        </span>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </p>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-9">
@@ -25,5 +43,11 @@
         <p><a href="{% url "update_text" text.id %}">Modify</a></p>
     {% endif %}
 </div>
+
+<script>
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover();
+});
+</script>
 
 {% endblock %}
