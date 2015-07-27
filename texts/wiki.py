@@ -29,7 +29,7 @@ def get_authors_names(fill_db, many_items):  # usused for now
                  "Wang Changling", "Qiwu Qian", "Wei Yingwu", "Liu Zongyuan",
                  "Bai Juyi", "Li Shangyin"]
         else:
-            authors_list = ["Du Fu", "Tao Yuanming"]
+            authors_list = ["Du Fu", "Zhuangzi", "Tao Yuanming"]
     return authors_list
 
 
@@ -82,6 +82,9 @@ if __name__ == "__main__":
             page_author = wikipedia.page(name_author)
             biography = wikipedia.summary(name_author)
         except wikipedia.exceptions.PageError, error:
+            continue
+        except wikipedia.exceptions.DisambiguationError, error:
+            print "Several possibilities for", name_author, ":", error
             continue
 
         # get biography and dates

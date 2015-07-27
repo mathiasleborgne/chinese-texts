@@ -84,6 +84,7 @@ def make_text_metadata(text, fill_db, all_characters):
         print
         print "Erasing data for text:", text.title_english
         text.chars_data = None
+        raise error
     except IndexError, error:
         print "Got an unexpected character in text:", text.title_english, \
             "; parsing on!"
@@ -91,5 +92,8 @@ def make_text_metadata(text, fill_db, all_characters):
 
 if __name__ == "__main__":
     args = get_pinyin_parser().parse_args()
-    for text in get_all_texts(args.many_items, args.reset_db):
-        make_text_metadata(text, args.fill_db, args.all_characters)
+    try:
+        for text in get_all_texts(args.many_items, args.reset_db):
+            make_text_metadata(text, args.fill_db, args.all_characters)
+    except KeyboardInterrupt, error:
+        print "Interrupting"
