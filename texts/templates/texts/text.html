@@ -13,30 +13,32 @@
             <div class="col-sm-3">
                 <div class="panel panel-default" id="panel_chinese">
                     <div class="panel-body">
-                        <p>
-                            {% if not text.chars_data %}
-                                {{ text.content_chinese|linebreaks }}
-                            {% else %}
-                                {% for char_data in chars_data_decoded %}
-                                    {% if char_data.is_line_break %}
-                                        <br>
-                                    {% elif not char_data.translation %}
+                        {% if not text.chars_data %}
+                            {{ text.content_chinese|linebreaks }}
+                        {% else %}
+                            <p>
+                            {% for char_data in chars_data_decoded %}
+                                {% if char_data.is_line_break %}
+                                    <br>
+                                {% elif not char_data.translation %}
+                                    {{ char_data.character }}
+                                {% else %}
+                                    <span data-toggle="popover" data-trigger="hover" data-placement="top"
+                                     title="{{ char_data.translation }}" data-content="{{ char_data.pinyin }}">
                                         {{ char_data.character }}
-                                    {% else %}
-                                        <span data-toggle="popover" data-trigger="hover" data-placement="top"
-                                         title="{{ char_data.translation }}" data-content="{{ char_data.pinyin }}">
-                                            {{ char_data.character }}
-                                        </span>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                        </p>
+                                    </span>
+                                {% endif %}
+                            {% endfor %}
+                            </p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
             <div class="col-sm-9">
                 <div class="panel panel-default" id="panel_english">
-                    <div class="panel-body"><p>{{ text.content_english|linebreaks }}</p></div>
+                    <div class="panel-body">
+                        {{ text.content_english|linebreaks }}
+                    </div>
                 </div>
             </div>
         </div class="row">
