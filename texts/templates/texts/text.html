@@ -20,10 +20,12 @@
                                 {% for char_data in chars_data_decoded %}
                                     {% if char_data.is_line_break %}
                                         <br>
+                                    {% elif not char_data.translation %}
+                                        {{ char_data.character }}
                                     {% else %}
                                         <span data-toggle="popover" data-trigger="hover" data-placement="top"
-                                         title="{{char_data.translation}}" data-content="{{char_data.pinyin}}">
-                                            {{char_data.character}}
+                                         title="{{ char_data.translation }}" data-content="{{ char_data.pinyin }}">
+                                            {{ char_data.character }}
                                         </span>
                                     {% endif %}
                                 {% endfor %}

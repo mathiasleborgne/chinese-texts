@@ -20,6 +20,10 @@ def get_parser():
     parser.add_argument("--fill_db",
                         action="store_true",
                         help="Actually change the database")
+    parser.add_argument("--reset_db",
+                        action="store_true",
+                        help="Re-fetch pinyin for all texts in the db, instead"
+                             " of only fetching the texts without pinyin")
     return parser
 
 def get_texts_parser():
@@ -115,8 +119,12 @@ class TextScraper(object):
 
     def add_text_to_db(self):
         author = self.get_author()
-        remove_text_duplicate(self.title_english)
+        texts = Text.objects.filter(title_english=title_english)
+        if texts and not self.args.reset_db:
+            print "Not replacing text:", title_english
+            return
         try:
+            remove_text_duplicate(texts)
             text = Text(title_english=self.title_english,
                         title_chinese=self.title_chinese,
                         title_pinyin=self.title_pinyin,
@@ -286,8 +294,7 @@ def remove_str(content, str_to_remove, start_at=0):
     return "".join(new_content)
 
 
-def remove_text_duplicate(title_english):
-    texts = Text.objects.filter(title_english=title_english)
+def remove_text_duplicate(texts):
     for text in texts:
         print "removing:", title_english
         text.delete()

@@ -1,3 +1,5 @@
+#-*- coding: utf-8 -*-
+
 from django.db import models
 from django.db.models import Q
 from django.contrib.auth.models import User
@@ -47,16 +49,17 @@ class CharData(object):
        between this storage class and the parsing system
     """
 
+    special_characters = [
+        "。", "，", "?", "；", "？",
+    ]
+    line_break = "\n"
+
     def __init__(self, character, translation, pinyin):
         super(CharData, self).__init__()
         self.character = character
-        self.is_line_break = character == "\n"
-        if self.is_line_break:
-            self.translation = None
-            self.pinyin = None
-        else:
-            self.translation = translation
-            self.pinyin = pinyin
+        self.is_line_break = character == self.line_break
+        self.translation = translation
+        self.pinyin = pinyin
 
     @classmethod
     def from_json(cls, item_json):
@@ -73,6 +76,10 @@ class CharData(object):
     @classmethod
     def from_line_break(cls):
         return cls("\n", None, None)
+
+    @classmethod
+    def from_special_character(cls, character):
+        return cls(character, None, None)
 
     def get_JSONable_item(self):
         if self.is_line_break:

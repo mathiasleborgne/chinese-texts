@@ -19,10 +19,11 @@ def get_pinyin_parser():
     parser.add_argument("--all_characters",
                         action="store_true",
                         help="Get all all characters from the texts")
-    parser.add_argument("--reset_db",
+    parser.add_argument("--select_text", default=None,
+                        help="Select an text")
+    parser.add_argument("--verbose",
                         action="store_true",
-                        help="Re-fetch pinyin for all texts in the db, instead"
-                             " of only fetching the texts without pinyin")
+                        help="A lot of logs")
     return parser
 
 
@@ -30,14 +31,16 @@ def get_soup(url):
     return BeautifulSoup(get_html(url), 'html.parser')
 
 
-def get_all_texts(many_items, reset_db):
+def get_all_texts(args):
+    if args.select_text is not None:
+        return Text.objects.filter(title_english=args.select_text)
     all_texts = Text.objects.all()
-    if not reset_db:
+    if not args.reset_db:
         for text in all_texts:
             if text.chars_data is not None:
                 print "Not processing text:", text.title_english
         all_texts = [text for text in all_texts if text.chars_data is None]
-    return all_texts if many_items else all_texts[:2]
+    return all_texts if args.many_items else all_texts[:2]
 
 
 def get_characters(text, all_characters):
@@ -48,37 +51,48 @@ def get_characters(text, all_characters):
         return list(all_characters_str)[:2]
 
 
-def get_char_data(char):
-    if char == "\n":
-        print "Linebreak"
-        return CharData.from_line_break()
+def get_char_data(char, args):
     char_encoded = char.encode('utf-8')
-    url_full = url_root + char_encoded
-    soup = get_soup(url_full)
+    if char_encoded == CharData.line_break:
+        if args.verbose:
+            print "Linebreak"
+        return CharData.from_line_break()
+    elif char_encoded in CharData.special_characters:
+        if args.verbose:
+            print "special_character:", char_encoded
+        return CharData.from_special_character(char_encoded)
+    try:
+        url_full = url_root + char_encoded
+        soup = get_soup(url_full)
 
-    def get_chinese_item(selector):
-        hyperlinks = soup.select(selector)
-        return hyperlinks[0].parent.parent.select("td code")[0]\
-            .decode_contents()
+        def get_chinese_item(selector):
+            hyperlinks = soup.select(selector)
+            return hyperlinks[0].parent.parent.select("td code")[0]\
+                .decode_contents()
 
-    pinyin = get_chinese_item(
-        'a[href="http://www.unicode.org/reports/tr38/index.html#kMandarin"]')\
-        .encode('utf-8')
-    translation = get_chinese_item(
-        'a[href="http://www.unicode.org/reports/tr38/index.html#kDefinition"]')
-    print "   pinyin:", pinyin, "/ translation:", translation
-    return CharData(char_encoded, pinyin, translation)
+        pinyin = get_chinese_item(
+            'a[href="http://www.unicode.org/reports/tr38/index.html#kMandarin"]')\
+            .encode('utf-8')
+        translation = get_chinese_item(
+            'a[href="http://www.unicode.org/reports/tr38/index.html#kDefinition"]')
+        if args.verbose:
+            print "   pinyin:", pinyin, "/ translation:", translation
+        return CharData(char_encoded, pinyin, translation)
+    except IndexError, error:
+        print "Unexpected character:", char
+        raise error
 
 
-def make_text_metadata(text, fill_db, all_characters):
+def make_text_metadata(text, args):
     try:
         print "Getting data for text:", text.title_english
-        chars_data = [get_char_data(char).get_JSONable_item()
-                      for char in get_characters(text, all_characters)]
+        chars_data = [get_char_data(char, args).get_JSONable_item()
+                      for char in get_characters(text, args.all_characters)]
         text.chars_data = json.dumps(chars_data)
-        print "JSON encoding for text:", text.chars_data
-        print
-        if fill_db:
+        if args.verbose:
+            print "JSON encoding for text:", text.chars_data
+            print
+        if args.fill_db:
             text.save()
     except KeyboardInterrupt, error:
         print
@@ -88,12 +102,15 @@ def make_text_metadata(text, fill_db, all_characters):
     except IndexError, error:
         print "Got an unexpected character in text:", text.title_english, \
             "; parsing on!"
+        print "     got:", error
 
 
 if __name__ == "__main__":
     args = get_pinyin_parser().parse_args()
     try:
-        for text in get_all_texts(args.many_items, args.reset_db):
-            make_text_metadata(text, args.fill_db, args.all_characters)
+        all_texts = get_all_texts(args)
+        print "Parsing", len(all_texts), "texts"
+        for text in all_texts:
+            make_text_metadata(text, args)
     except KeyboardInterrupt, error:
         print "Interrupting"
