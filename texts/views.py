@@ -12,6 +12,7 @@ from django.views.generic import CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
+from django.core.mail import mail_admins, send_mail
 import json
 
 template_prefix = "texts"
@@ -69,6 +70,11 @@ def contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         successfully_sent = form.is_valid()
+        subject = form.cleaned_data["subject"]
+        message = "You had a message from steleforest/contact:\n" + \
+            form.cleaned_data["message"]
+        sender = form.cleaned_data["sender"]
+        send_mail(subject, message, sender, ["mathias.leborgne@gmail.com"])
     else:
         form = ContactForm()
     return render(request, make_template_name("contact"), locals())
