@@ -10,14 +10,13 @@
     </div>
     <div class="panel-body">
         <div class="row">
-            <div class="col-sm-3">
-                <div class="panel panel-default" id="panel_chinese">
-                    <div class="panel-body">
-                        {% if not text.chars_data %}
-                            {{ text.content_chinese|linebreaks }}
+            {% if text.content_lines %}
+                {% for line_chinese, line_pinyin, line_english, line_char_data in text.content_lines %}
+                    <div class="col-sm-3" id="panel_text">
+                        {% if not line_char_data %}
+                            {{ line_chinese }}
                         {% else %}
-                            <p>
-                            {% for char_data in chars_data_decoded %}
+                            {% for char_data in line_char_data %}
                                 {% if char_data.is_line_break %}
                                     <br>
                                 {% elif not char_data.translation %}
@@ -29,18 +28,48 @@
                                     </span>
                                 {% endif %}
                             {% endfor %}
-                            </p>
                         {% endif %}
                     </div>
-                </div>
-            </div>
-            <div class="col-sm-9">
-                <div class="panel panel-default" id="panel_english">
-                    <div class="panel-body">
-                        {{ text.content_english|linebreaks }}
+                    <div class="col-sm-9" id="panel_text">
+                        {{ line_english }} <br>
                     </div>
+                    {% if line_pinyin %}
+                        <div class="collapse">
+                            <div class="col-sm-3" id="pinyin_small">
+                                {{ line_pinyin }} <br>
+                            </div>
+                            <div class="col-sm-9">
+                                <br>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+            {% else %}
+                <div class="col-sm-3" id="panel_text">
+                    {% if not text.chars_data %}
+                        {{ text.content_chinese|linebreaks }}
+                    {% else %}
+                        <p>
+                        {% for char_data in chars_data_decoded %}
+                            {% if char_data.is_line_break %}
+                                <br>
+                            {% elif not char_data.translation %}
+                                {{ char_data.character }}
+                            {% else %}
+                                <span data-toggle="popover" data-trigger="hover" data-placement="top"
+                                 title="{{ char_data.pinyin }}" data-content="{{ char_data.translation }}">
+                                    {{ char_data.character }}
+                                </span>
+                            {% endif %}
+                        {% endfor %}
+                        </p>
+                    {% endif %}
                 </div>
-            </div>
+                <div class="col-sm-9" id="panel_text">
+                    {{ text.content_english|linebreaks }}
+                </div>
+            {% endif %}
         </div class="row">
     </div>
     {% if user.is_authenticated %}
@@ -48,10 +77,27 @@
     {% endif %}
 </div>
 
+{% if text.content_lines and text.content_pinyin %}
+    <div class="col-sm-12">
+        <button type="button" class="btn btn-primary">Pinyin</button>
+    </div>
+{% endif %}
+
+
 <script>
 $(document).ready(function(){
     $('[data-toggle="popover"]').popover();
 });
 </script>
+
+
+<script>
+$(document).ready(function(){
+    $(".btn-primary").click(function(){
+        $(".collapse").collapse('toggle');
+    });
+});
+</script>
+
 
 {% endblock %}

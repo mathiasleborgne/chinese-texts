@@ -45,6 +45,57 @@ class Text(models.Model):
     def count_texts():
         return len(Text.objects.all())
 
+    def content_lines(self):
+        lines_chinese = split_lines(self.content_chinese)
+        chars_data_decoded = CharData.get_all_chars_data(self)
+        if self.content_pinyin is None:
+            lines_pinyin = [None for _ in lines_chinese]
+        else:
+            lines_pinyin = split_lines(self.content_pinyin)
+        lines_english = split_lines(self.content_english)
+        if not (len(lines_chinese) == len(lines_pinyin) == \
+                len(lines_english)):
+            return None
+        if chars_data_decoded is not None:
+            lines_char_data = split_lines_chardata(chars_data_decoded)
+            if len(lines_english) != len(lines_char_data):
+                return None
+        else:
+            lines_char_data = None
+        lines = [(lines_chinese[index], lines_pinyin[index],
+                  lines_english[index],
+                  lines_char_data[index] if lines_char_data is not None else None)
+                 for index in range(len(lines_chinese))]
+        return lines
+
+class TextLine(object):
+    """docstring for TextLine"""
+    def __init__(self, lines_chinese, lines_pinyin, lines_english):
+        super(TextLine, self).__init__()
+        self.arg = arg
+
+
+
+def split_lines(content):
+    return content.split('\n')
+
+def split_lines_chardata(chars_data):
+    index_linebreak = None
+    for index, char_data in enumerate(chars_data):
+        if char_data.is_line_break:
+            index_linebreak = index
+            break
+    if index_linebreak is None:
+        return [chars_data]
+    else:
+        head = chars_data[:index_linebreak - 1]
+        try:
+            queue = chars_data[index_linebreak + 1:]
+            return [head] + split_lines_chardata(queue)
+        except IndexError, error:
+            return [head]
+
+
 
 class CharData(object):
     """Metadata for chinese character

@@ -45,8 +45,13 @@ body {
     width: 100px;
 }
 
-#panel_english, #panel_chinese {
+#panel_text {
     font-size: 170%;
+}
+
+#pinyin_small {
+    font-size: 100%;
+    color: #666666;
 }
 
 footer {
