@@ -38,12 +38,7 @@ class ReadText(DetailView):
         context = super(ReadText, self).get_context_data(**kwargs)
         # decode metadata
         text = self.get_object()
-        chars_data_json = text.chars_data
-        json_decoder = json.decoder.JSONDecoder()
-        if chars_data_json is not None:
-            chars_data = [CharData.from_json(char_data_raw) for char_data_raw
-                          in json_decoder.decode(chars_data_json)]
-            context['chars_data_decoded'] = chars_data
+        context['chars_data_decoded'] = CharData.get_all_chars_data(text)
         return context
 
 

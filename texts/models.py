@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import Q
 from django.contrib.auth.models import User
 import operator
+import json
 
 
 class Text(models.Model):
@@ -47,16 +48,14 @@ class Text(models.Model):
 
 class CharData(object):
     """Metadata for chinese character
-       We don't do the parsing here to avoid too heavy dependency
-       between this storage class and the parsing system
     """
 
     special_characters = [
-        "。", "，", "?", "；", "？",
+        "。", "，", "?", "；", "？", "！",
     ]
     line_break = "\n"
 
-    def __init__(self, character, translation, pinyin):
+    def __init__(self, character, pinyin, translation):
         super(CharData, self).__init__()
         self.character = character
         self.is_line_break = character == self.line_break
@@ -68,12 +67,12 @@ class CharData(object):
         "Initialize CharData from a json serialization"
         character = item_json[0]
         if len(item_json) == 1:
-            translation = None
             pinyin = None
+            translation = None
         else:
-            translation = item_json[1]
-            pinyin = item_json[2]
-        return cls(character, translation, pinyin)
+            pinyin = item_json[1]
+            translation = item_json[2]
+        return cls(character, pinyin, translation)
 
     @classmethod
     def from_line_break(cls):
@@ -87,8 +86,34 @@ class CharData(object):
         if self.is_line_break:
             return [self.character]
         else:
-            return [self.character, self.translation, self.pinyin]
+            return [self.character, self.pinyin, self.translation]
 
+
+    @staticmethod
+    def get_all_chars_data(text):
+        chars_data_json = text.chars_data
+        json_decoder = json.decoder.JSONDecoder()
+        if chars_data_json is not None:
+            return [CharData.from_json(char_data_raw) for char_data_raw
+                    in json_decoder.decode(chars_data_json)]
+        else:
+            return None
+
+    @staticmethod
+    def make_json(text, get_char_data, all_characters=True):
+        """ get_char_data must be a function: char -> CharData
+        """
+
+        def get_characters(text):
+            all_characters_str = text.content_chinese
+            if all_characters:
+                return list(all_characters_str)
+            else:
+                return list(all_characters_str)[:2]
+
+        chars_data = [get_char_data(char).get_JSONable_item()
+                      for char in get_characters(text)]
+        return json.dumps(chars_data)
 
 
 class Author(models.Model):

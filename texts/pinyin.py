@@ -24,6 +24,10 @@ def get_pinyin_parser():
     parser.add_argument("--verbose",
                         action="store_true",
                         help="A lot of logs")
+    parser.add_argument("--content_pinyin",
+                        action="store_true",
+                        help="Only fill content_pinyin from texts with "
+                             "metadata")
     return parser
 
 
@@ -43,12 +47,11 @@ def get_all_texts(args):
     return all_texts if args.many_items else all_texts[:2]
 
 
-def get_characters(text, all_characters):
-    all_characters_str = text.content_chinese
-    if all_characters:
-        return list(all_characters_str)
-    else:
-        return list(all_characters_str)[:2]
+def get_texts_with_metadata(args):
+    all_texts =  [text for text in Text.objects.all()
+                  if text.chars_data is not None
+                  and (text.content_pinyin is None or args.reset_db)]
+    return all_texts if args.many_items else all_texts[:2]
 
 
 def get_char_data(char, args):
@@ -86,9 +89,9 @@ def get_char_data(char, args):
 def make_text_metadata(text, args):
     try:
         print "Getting data for text:", text.title_english
-        chars_data = [get_char_data(char, args).get_JSONable_item()
-                      for char in get_characters(text, args.all_characters)]
-        text.chars_data = json.dumps(chars_data)
+        get_char_data_no_arg = (lambda char: get_char_data(char, args))
+        text.chars_data = CharData.make_json(text, get_char_data_no_arg,
+                                             args.all_characters)
         if args.verbose:
             print "JSON encoding for text:", text.chars_data
             print
@@ -105,12 +108,39 @@ def make_text_metadata(text, args):
         print "     got:", error
 
 
+def fill_content_pinyin(args):
+    texts = get_texts_with_metadata(args)
+    print "Filling pinyin for", len(texts), "texts"
+    for text in texts:
+        chars_data = CharData.get_all_chars_data(text)
+
+        def get_pinyin_content(char_data):
+            if char_data.pinyin is not None:
+                return char_data.pinyin
+            else:
+                return char_data.character
+
+        content_pinyin = " ".join([get_pinyin_content(char_data)
+                                   for char_data in chars_data])
+        text.content_pinyin = content_pinyin
+        print "got content_pinyin:", content_pinyin[:50], "..."
+        if args.fill_db:
+            text.save()
+
+
+
 if __name__ == "__main__":
     args = get_pinyin_parser().parse_args()
-    try:
-        all_texts = get_all_texts(args)
-        print "Parsing", len(all_texts), "texts"
-        for text in all_texts:
-            make_text_metadata(text, args)
-    except KeyboardInterrupt, error:
-        print "Interrupting"
+    if args.content_pinyin:
+        fill_content_pinyin(args)
+    else:
+        try:
+            all_texts = get_all_texts(args)
+            print "Parsing", len(all_texts), "texts"
+            for text in all_texts:
+                make_text_metadata(text, args)
+        except KeyboardInterrupt, error:
+            print "Interrupting"
+        fill_content_pinyin(args)
+
+
