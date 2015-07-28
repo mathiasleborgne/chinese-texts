@@ -7,6 +7,18 @@
         <h1>{{ text.title_chinese }} <small>{{ text.title_english }}</small></h1>
         <h2>{{ text.author.name_chinese }} <small><a href="{% url "author_page" text.author.id %}">{{ text.author.name_pinyin }}</a></small></h2>
 
+        {% if text.content_lines and text.content_pinyin %}
+            <div class="btn-group">
+              <button type="button" class="btn btn-default dropdown-toggle"
+               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Display <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a href="#" class="btn-pinyin">Pinyin</a></li>
+                <!-- <li><a href="#">Simplification</a></li> -->
+              </ul>
+            </div>
+        {% endif %}
     </div>
     <div class="panel-body">
         <div class="row">
@@ -77,13 +89,6 @@
     {% endif %}
 </div>
 
-{% if text.content_lines and text.content_pinyin %}
-    <div class="col-sm-12">
-        <button type="button" class="btn btn-primary">Pinyin</button>
-    </div>
-{% endif %}
-
-
 <script>
 $(document).ready(function(){
     $('[data-toggle="popover"]').popover();
@@ -93,7 +98,7 @@ $(document).ready(function(){
 
 <script>
 $(document).ready(function(){
-    $(".btn-primary").click(function(){
+    $(".btn-pinyin").click(function(){
         $(".collapse").collapse('toggle');
     });
 });
