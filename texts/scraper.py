@@ -119,9 +119,9 @@ class TextScraper(object):
 
     def add_text_to_db(self):
         author = self.get_author()
-        texts = Text.objects.filter(title_english=title_english)
+        texts = Text.objects.filter(title_english=self.title_english)
         if texts and not self.args.reset_db:
-            print "Not replacing text:", title_english
+            print "Not replacing text:", self.title_english
             return
         try:
             remove_text_duplicate(texts)
