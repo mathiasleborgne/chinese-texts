@@ -31,6 +31,8 @@ class Text(models.Model):
         search_fields = [
             "content_english",
             "content_chinese",
+            "title_english",
+            "title_chinese",
             "author__name_pinyin",
             "author__name_chinese",
         ]
