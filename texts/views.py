@@ -38,7 +38,7 @@ class ReadText(DetailView):
         context = super(ReadText, self).get_context_data(**kwargs)
         # decode metadata
         text = self.get_object()
-        context['chars_data_decoded'] = CharData.get_all_chars_data(text)
+        context['chars_data_decoded'] = text.get_all_chars_data()
         return context
 
 

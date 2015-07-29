@@ -4,21 +4,29 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h1>{{ text.title_chinese }} <small>{{ text.title_english }}</small></h1>
-        <h2>{{ text.author.name_chinese }} <small><a href="{% url "author_page" text.author.id %}">{{ text.author.name_pinyin }}</a></small></h2>
-
+        <h1>{{ text.title_chinese }} <small>{{ text.title_english }}</small>
+        </h1>
         {% if text.content_lines and text.content_pinyin %}
-            <div class="btn-group">
-              <button type="button" class="btn btn-default dropdown-toggle"
-               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Display <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu">
-                <li><a href="#" class="btn-pinyin">Pinyin</a></li>
-                <!-- <li><a href="#">Simplification</a></li> -->
-              </ul>
-            </div>
+            <small>
+                <div class="btn-group pull-right">
+                    <button type="button" class="btn btn-default dropdown-toggle"
+                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="glyphicon glyphicon-option-vertical"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" class="btn-pinyin">
+                            <span class="pinyin_collapse">Pinyin</span>
+                            <span class="pinyin_collapse" style="display: none">No Pinyin</span>
+                        </a></li>
+                        <li><a href="#" class="btn-traditional">
+                            <span class="char_traditional">Traditional</span>
+                            <span class="char_traditional" style="display: none">Simplified</span>
+                        </a></li>
+                    </ul>
+                </div>
+            </small>
         {% endif %}
+        <h2>{{ text.author.name_chinese }} <small><a href="{% url "author_page" text.author.id %}">{{ text.author.name_pinyin }}</a></small></h2>
     </div>
     <div class="panel-body">
         <div class="row">
@@ -32,11 +40,12 @@
                                 {% if char_data.is_line_break %}
                                     <br>
                                 {% elif not char_data.translation %}
-                                    {{ char_data.character }}
+                                    {{ char_data.character_simplified }}
                                 {% else %}
                                     <span data-toggle="popover" data-trigger="hover" data-placement="top"
                                      title="{{ char_data.pinyin }}" data-content="{{ char_data.translation }}">
-                                        {{ char_data.character }}
+                                        <span class="char_traditional">{{ char_data.character_simplified }}</span>
+                                        <span class="char_traditional" style="display: none">{{ char_data.character_traditional }}</span>
                                     </span>
                                 {% endif %}
                             {% endfor %}
@@ -46,7 +55,7 @@
                         {{ line_english }} <br>
                     </div>
                     {% if line_pinyin %}
-                        <div class="collapse">
+                        <div class="pinyin_collapse" style="display: none">
                             <div class="col-sm-3" id="pinyin_small">
                                 {{ line_pinyin }} <br>
                             </div>
@@ -67,11 +76,11 @@
                             {% if char_data.is_line_break %}
                                 <br>
                             {% elif not char_data.translation %}
-                                {{ char_data.character }}
+                                {{ char_data.character_simplified }}
                             {% else %}
                                 <span data-toggle="popover" data-trigger="hover" data-placement="top"
                                  title="{{ char_data.pinyin }}" data-content="{{ char_data.translation }}">
-                                    {{ char_data.character }}
+                                    {{ char_data.character_simplified }}
                                 </span>
                             {% endif %}
                         {% endfor %}
@@ -97,11 +106,19 @@ $(document).ready(function(){
 
 
 <script>
+
 $(document).ready(function(){
     $(".btn-pinyin").click(function(){
-        $(".collapse").collapse('toggle');
+        $(".pinyin_collapse").toggle()
     });
 });
+
+$(document).ready(function(){
+    $(".btn-traditional").click(function(){
+        $(".char_traditional").toggle()
+    });
+});
+
 </script>
 
 

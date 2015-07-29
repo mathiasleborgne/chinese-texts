@@ -47,17 +47,24 @@ class Text(models.Model):
 
     def content_lines(self):
         lines_chinese = split_lines(self.content_chinese)
-        chars_data_decoded = CharData.get_all_chars_data(self)
+        chars_data_decoded = self.get_all_chars_data()
         if self.content_pinyin is None:
             lines_pinyin = [None for _ in lines_chinese]
         else:
             lines_pinyin = split_lines(self.content_pinyin)
         lines_english = split_lines(self.content_english)
+
+        def print_lines(lines):
+            """for debug"""
+            for index_line, line in enumerate(lines):
+                print index_line, "-", line
+
         if not (len(lines_chinese) == len(lines_pinyin) == \
                 len(lines_english)):
             return None
         if chars_data_decoded is not None:
             lines_char_data = split_lines_chardata(chars_data_decoded)
+            lines_char_data = [line for line in lines_char_data if line != []]
             if len(lines_english) != len(lines_char_data):
                 return None
         else:
@@ -68,6 +75,32 @@ class Text(models.Model):
                  for index in range(len(lines_chinese))]
         return lines
 
+    def get_all_chars_data(self):
+        chars_data_json = self.chars_data
+        json_decoder = json.decoder.JSONDecoder()
+        if chars_data_json is not None:
+            return [CharData.from_json(char_data_raw) for char_data_raw
+                    in json_decoder.decode(chars_data_json)]
+        else:
+            return None
+
+    def make_json(self, get_char_data, all_characters=True):
+        """ get_char_data must be a function: char -> CharData
+        """
+
+        all_characters_str = self.content_chinese
+        if all_characters:
+            all_characters = list(all_characters_str)
+        else:
+            all_characters = list(all_characters_str)[:2]
+
+        char_objects = [get_char_data(char) for char in all_characters]
+        chars_data = [char_object.get_JSONable_item()
+                      for char_object in char_objects
+                      if char_object is not None]
+        self.chars_data = json.dumps(chars_data)
+
+
 class TextLine(object):
     """docstring for TextLine"""
     def __init__(self, lines_chinese, lines_pinyin, lines_english):
@@ -75,9 +108,10 @@ class TextLine(object):
         self.arg = arg
 
 
-
 def split_lines(content):
-    return content.split('\n')
+    splitted_lines = content.split('\n')
+    return [line for line in splitted_lines if line != ""]
+
 
 def split_lines_chardata(chars_data):
     index_linebreak = None
@@ -105,66 +139,53 @@ class CharData(object):
         "。", "，", "?", "；", "？", "！",
     ]
     line_break = "\n"
+    strange_character = "\r"
 
-    def __init__(self, character, pinyin, translation):
+    def __init__(self, character_simplified, character_traditional,
+                 pinyin, translation):
+        """ Class for character metadata handling
+            Character_traditional can be None, not character_simplified
+        """
         super(CharData, self).__init__()
-        self.character = character
-        self.is_line_break = character == self.line_break
+        if character_simplified is None:
+            raise Exception("wrong character data")
+        self.character_simplified = character_simplified
+        self.character_traditional = character_traditional \
+            if character_traditional is not None else character_simplified
+        self.is_line_break = character_simplified == self.line_break
         self.translation = translation
         self.pinyin = pinyin
 
     @classmethod
     def from_json(cls, item_json):
         "Initialize CharData from a json serialization"
-        character = item_json[0]
-        if len(item_json) == 1:
+        character_simplified = item_json[0]
+        if len(item_json) < 4:
+            character_traditional = None
             pinyin = None
             translation = None
         else:
-            pinyin = item_json[1]
-            translation = item_json[2]
-        return cls(character, pinyin, translation)
+            character_traditional = item_json[1]
+            pinyin = item_json[2]
+            translation = item_json[3]
+        return cls(character_simplified, character_traditional,
+                   pinyin, translation)
 
     @classmethod
     def from_line_break(cls):
-        return cls("\n", None, None)
+        return cls("\n", None, None, None)
 
     @classmethod
-    def from_special_character(cls, character):
-        return cls(character, None, None)
+    def from_special_character(cls, character_simplified):
+        return cls(character_simplified, None, None, None)
 
     def get_JSONable_item(self):
         if self.is_line_break:
-            return [self.character]
+            return [self.character_simplified]
         else:
-            return [self.character, self.pinyin, self.translation]
+            return [self.character_simplified, self.character_traditional,
+                    self.pinyin, self.translation]
 
-
-    @staticmethod
-    def get_all_chars_data(text):
-        chars_data_json = text.chars_data
-        json_decoder = json.decoder.JSONDecoder()
-        if chars_data_json is not None:
-            return [CharData.from_json(char_data_raw) for char_data_raw
-                    in json_decoder.decode(chars_data_json)]
-        else:
-            return None
-
-    @staticmethod
-    def make_json(text, get_char_data, all_characters=True):
-        """ get_char_data must be a function: char -> CharData
-        """
-
-        def get_characters(text):
-            all_characters_str = text.content_chinese
-            if all_characters:
-                return list(all_characters_str)
-            else:
-                return list(all_characters_str)[:2]
-
-        chars_data = [get_char_data(char).get_JSONable_item()
-                      for char in get_characters(text)]
-        return json.dumps(chars_data)
 
 
 class Author(models.Model):
