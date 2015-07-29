@@ -8,12 +8,14 @@
 <ul class="list-group">
 {% for text in latest_texts %}
     <li class="list-group-item">
-        <span class="badge"><a href="{% url "read_text" text.id %}">Read</a></span>
         <h3 class="list-group-item-heading">
             <a href="{% url "read_text" text.id %}">{{ text.title_english }}</a>
             <small><a href="{% url "author_page" text.author.id %}">{{ text.author.name_pinyin }}</a></small>
+            <small> <span class="label label-default pull-right"><a href="{% url "read_text" text.id %}">Read</a></span></small>
         </h3>
-        <p class="list-group-item-text">{{ text.content_english|truncatewords_html:20|linebreaks }}</p>
+        <p class="list-group-item-text">
+          {{ text.content_english|truncatewords_html:20|linebreaks }}
+        </p>
     </li>
 {% empty %}
     <p>No text to display</p>
@@ -24,14 +26,14 @@
     <nav>
       <ul class="pager">
        {% if page_obj.has_previous %}
-        <li class="previous"><a href="?page={{ page_obj.previous_page_number }}"><span aria-hidden="true">&larr;</span>Newer</a></li>
+        <li class="previous"><a href="?page={{ page_obj.previous_page_number }}"><span aria-hidden="true">&larr;</span>Previous</a></li>
        {% else %}
-        <li class="previous disabled"><a href="#"><span aria-hidden="true">&larr;</span>Newer</a></li>
+        <li class="previous disabled"><a href="#"><span aria-hidden="true">&larr;</span>Previous</a></li>
        {% endif %}
        {% if page_obj.has_next %}
-        <li class="next"><a href="?page={{ page_obj.next_page_number }}">Older<span aria-hidden="true">&rarr;</span></a></li>
+        <li class="next"><a href="?page={{ page_obj.next_page_number }}">Next<span aria-hidden="true">&rarr;</span></a></li>
        {% else %}
-        <li class="next disabled"><a href="#"><span aria-hidden="true">&rarr;</span>Older</a></li>
+        <li class="next disabled"><a href="#"><span aria-hidden="true">&rarr;</span>Next</a></li>
        {% endif %}
       </ul>
     </nav>

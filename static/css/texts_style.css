@@ -23,11 +23,15 @@ body {
     color: #666666;
 }
 
-.badge {
+.badge, .label-default{
     background-color: #C41B00;
 }
 
-.badge a {
+.label-info{
+    background-color: #777777;
+}
+
+.badge a, .label-default a {
     color: #FFFFFF;
 }
 

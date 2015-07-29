@@ -178,6 +178,9 @@ class Author(models.Model):
         # todo replace by name_chinese
         return self.name_pinyin
 
+    def count_texts(self):
+        return len(Text.objects.filter(author__name_chinese=self.name_chinese))
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User)

@@ -7,8 +7,7 @@
 <ul class="list-group">
 {% for author in authors %}
   <li class="list-group-item">
-    <!-- <span class="badge">0</span> -->
-    <!-- TODO nomber of texts -->
+    <span class="badge">{{ author.count_texts }}</span>
     <a href="{% url "author_page" author.id %}">{{ author.name_pinyin }}</a>
     <small>{{ author.name_chinese }}</small>
   </li>
