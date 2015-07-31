@@ -56,13 +56,13 @@
                     </div>
                     {% if line_pinyin %}
                         <div class="pinyin_collapse">
-                            <div class="col-sm-3" id="pinyin_small">
+                            <div class="col-sm-12" id="pinyin_small">
                                 {{ line_pinyin }} <br>
                             </div>
-                            <div class="col-sm-9">
-                                <br>
-                            </div>
                         </div>
+                        <span class="pinyin_collapse" style="display: none">
+                            <div class="col-sm-12" id="pinyin_small"></div>
+                        </span>
                     {% endif %}
                 {% endfor %}
 
