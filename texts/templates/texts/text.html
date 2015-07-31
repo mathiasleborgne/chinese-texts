@@ -15,8 +15,8 @@
                     </button>
                     <ul class="dropdown-menu">
                         <li><a href="#" class="btn-pinyin">
-                            <span class="pinyin_collapse">Pinyin</span>
-                            <span class="pinyin_collapse" style="display: none">No Pinyin</span>
+                            <span class="pinyin_collapse">No Pinyin</span>
+                            <span class="pinyin_collapse" style="display: none">Pinyin</span>
                         </a></li>
                         <li><a href="#" class="btn-traditional">
                             <span class="char_traditional">Traditional</span>
@@ -55,7 +55,7 @@
                         {{ line_english }} <br>
                     </div>
                     {% if line_pinyin %}
-                        <div class="pinyin_collapse" style="display: none">
+                        <div class="pinyin_collapse">
                             <div class="col-sm-3" id="pinyin_small">
                                 {{ line_pinyin }} <br>
                             </div>
