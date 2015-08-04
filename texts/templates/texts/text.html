@@ -37,9 +37,8 @@
                             {{ line_chinese }}
                         {% else %}
                             {% for char_data in line_char_data %}
-                                {% if char_data.is_line_break %}
-                                    <br>
-                                {% elif not char_data.translation %}
+                                {% if not char_data.translation or char_data.is_special_character %}
+                                    <!-- no translation means also no traditional character, a priori -->
                                     {{ char_data.character_simplified }}
                                 {% else %}
                                     <span data-toggle="popover" data-trigger="hover" data-placement="top"

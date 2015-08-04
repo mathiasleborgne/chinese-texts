@@ -114,6 +114,7 @@ def split_lines(content):
 
 
 def split_lines_chardata(chars_data):
+    # [char_1, char_linebreak, char_2] -> [[char_1],[char_2]]
     index_linebreak = None
     for index, char_data in enumerate(chars_data):
         if char_data.is_line_break:
@@ -122,7 +123,7 @@ def split_lines_chardata(chars_data):
     if index_linebreak is None:
         return [chars_data]
     else:
-        head = chars_data[:index_linebreak - 1]
+        head = chars_data[:index_linebreak]
         try:
             queue = chars_data[index_linebreak + 1:]
             return [head] + split_lines_chardata(queue)
@@ -153,6 +154,8 @@ class CharData(object):
         self.character_traditional = character_traditional \
             if character_traditional is not None else character_simplified
         self.is_line_break = character_simplified == self.line_break
+        self.is_special_character = \
+            character_simplified.encode("utf-8") in self.special_characters
         self.translation = translation
         self.pinyin = pinyin
 
