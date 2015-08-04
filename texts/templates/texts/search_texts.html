@@ -3,17 +3,24 @@
 
 {% block content %}
     {% if was_valid_search %}
-
         <h1>Your search matched the following texts:</h1>
+        <!-- todo: factorize the text display (taken from home) -->
+        <ul class="list-group">
         {% for text in searched_texts %}
-            <div class="text">
-                <h3>{{ text.title_english }} <small>{{ text.author.name_pinyin }}</small></h3>
-                <a href="{% url "read_text" text.id %}">Read</a>
-            </div>
+            <li class="list-group-item">
+                <h3 class="list-group-item-heading">
+                    <a href="{% url "read_text" text.id %}">{{ text.title_english }}</a>
+                    <small><a href="{% url "author_page" text.author.id %}">{{ text.author.name_pinyin }}</a></small>
+                    <small> <span class="label label-default pull-right"><a href="{% url "read_text" text.id %}">Read</a></span></small>
+                </h3>
+                <p class="list-group-item-text">
+                  {{ text.content_english|truncatewords_html:20|linebreaks }}
+                </p>
+            </li>
         {% empty %}
-            <p>Sorry, no match!</p>
+            <p>No text to display</p>
         {% endfor %}
-
+        </ul>
     {% else %}
 
         <form action="{% url "texts.views.search_texts" %}" method="post">
