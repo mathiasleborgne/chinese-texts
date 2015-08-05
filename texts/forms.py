@@ -68,14 +68,17 @@ class TextForm(forms.ModelForm):
 class AuthorForm(forms.ModelForm):
     class Meta:
         model = Author
-        fields = ("name_chinese", "name_pinyin",)
+        fields = ("name_chinese", "name_pinyin", "biography")
 
     def __init__(self, *args, **kwargs):
         super(AuthorForm, self).__init__(*args, **kwargs)
+        self.fields["biography"].required = False
+
         self.helper = FormHelper()
         self.helper.form_method = 'post'
         self.helper.form_action = ""
         self.helper.add_input(Submit('submit', 'Submit'))
+
 
 
 class LoginForm(forms.Form):

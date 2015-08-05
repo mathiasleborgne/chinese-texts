@@ -21,7 +21,7 @@ from django.contrib.auth.views import password_change, password_change_done, \
     password_reset, password_reset_done, password_reset_confirm, \
     password_reset_complete, logout_then_login
 from texts.views import TextList, ReadText, TextUpdate, TextCreate, \
-    TextDelete, AuthorCreate, AuthorList, AuthorView, UserCreate
+    TextDelete, AuthorCreate, AuthorUpdate, AuthorList, AuthorView, UserCreate
 
 
 urlpatterns = patterns(
@@ -36,8 +36,10 @@ urlpatterns = patterns(
     url(r'^create_user_success/$', 'create_user_success', name='create_user_success'),
     url(r'^log_in/$', 'log_in'),
     url(r'^log_out/$', 'log_out'),
-    url(r'^new_text/$', TextCreate.as_view(), name='new_text'),
     url(r'^create_author/$', AuthorCreate.as_view(), name='create_author'),
+    url(r'^update_author/(?P<pk>\d+)$', AuthorUpdate.as_view(),
+        name='update_author'),
+    url(r'^new_text/$', TextCreate.as_view(), name='new_text'),
     url(r'^update_text/(?P<pk>\d+)$', TextUpdate.as_view(),
         name='update_text'),
     url(r'^update_text/update_success$', 'update_success'),

@@ -16,6 +16,10 @@
     </p>
 {% endif %}
 
+{% if user.is_authenticated %}
+    <p><a href="{% url "update_author" author.id %}">Modify</a></p>
+{% endif %}
+
 <h2>Texts:</h2>
 
 <ul class="list-group">

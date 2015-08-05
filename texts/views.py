@@ -56,7 +56,6 @@ class AuthorView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(AuthorView, self).get_context_data(**kwargs)
         author = self.get_object()
-        print author
         context['texts'] = Text.objects.filter(author=author)
         return context
 
@@ -136,6 +135,14 @@ class AuthorCreate(CreateView):
     form_class = AuthorForm
     success_url = "/home"
 
+
+
+class AuthorUpdate(UpdateView):
+    model = Author
+    template_name = make_template_name("update_author")
+    context_object_name = "author"
+    form_class = AuthorForm
+    is_update = True
 
 class UserCreate(CreateView):
     model = User
