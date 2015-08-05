@@ -103,12 +103,10 @@ class TextUpdate(UpdateView):
     template_name = make_template_name("update_text")
     context_object_name = "text"
     form_class = TextForm
-    success_url = "/home"
     is_update = True
-    # todo success_url: print article
 
-    # def get_success_url(self):
-    #     return reverse('read_text', kwargs={'pk': self._id})
+    def get_success_url(self):
+        return reverse('read_text', kwargs={'pk': self.object.pk})
 
 
 class TextCreate(CreateView):
@@ -116,9 +114,10 @@ class TextCreate(CreateView):
     template_name = make_template_name("create_text")
     context_object_name = "text"
     form_class = TextForm
-    success_url = "/home"
     is_update = False
-    # todo success_url: print article
+
+    def get_success_url(self):
+        return reverse('read_text', kwargs={'pk': self.object.pk})
 
 
 class TextDelete(DeleteView):
@@ -133,8 +132,9 @@ class AuthorCreate(CreateView):
     template_name = make_template_name("create_author")
     context_object_name = "author"
     form_class = AuthorForm
-    success_url = "/home"
 
+    def get_success_url(self):
+        return reverse('author_page', kwargs={'pk': self.object.pk})
 
 
 class AuthorUpdate(UpdateView):
@@ -143,6 +143,9 @@ class AuthorUpdate(UpdateView):
     context_object_name = "author"
     form_class = AuthorForm
     is_update = True
+
+    def get_success_url(self):
+        return reverse('author_page', kwargs={'pk': self.object.pk})
 
 class UserCreate(CreateView):
     model = User
