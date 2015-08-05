@@ -5,6 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect, \
 from datetime import datetime
 from texts.models import Text, Author, CharData
 from django.contrib.auth.models import User
+from django.db.models import F
 from django.views.generic import ListView, DetailView
 from texts.forms import ContactForm, SearchTextsForm, TextForm, LoginForm, \
     AuthorForm, UserCreationMailForm
@@ -39,6 +40,8 @@ class ReadText(DetailView):
         # decode metadata
         text = self.get_object()
         context['chars_data_decoded'] = text.get_all_chars_data()
+        Text.objects.filter(pk=text.pk).update(view_count=F('view_count') + 1)
+        text.view_count += 1  # to show valid counter in the template
         return context
 
 
@@ -184,4 +187,5 @@ def log_out(request):
 
 def about(request):
     texts_count = Text.count_texts()
+    all_views_count = Text.count_all_views()
     return render(request, make_template_name("about"), locals())

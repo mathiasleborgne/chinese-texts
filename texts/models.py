@@ -23,6 +23,7 @@ class Text(models.Model):
     chars_data = models.TextField(null=True) # JSON-serialized (text) version of your list
     # see explanation for JSON serialization here:
     # http://stackoverflow.com/questions/1110153/what-is-the-most-efficent-way-to-store-a-list-in-the-django-models
+    view_count = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.title_english
@@ -44,6 +45,14 @@ class Text(models.Model):
     @staticmethod
     def count_texts():
         return len(Text.objects.all())
+
+    @staticmethod
+    def count_all_views():
+        views_sum = 0
+        for text in Text.objects.all():
+            views_sum += text.view_count
+        return views_sum
+
 
     def content_lines(self):
         lines_chinese = split_lines(self.content_chinese)

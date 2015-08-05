@@ -97,6 +97,10 @@
     {% endif %}
 </div>
 
+{% if user.is_authenticated %}
+    <div><small>Seen {{text.view_count}} times</small></div>
+{% endif %}
+
 <script>
 $(document).ready(function(){
     $('[data-toggle="popover"]').popover();
