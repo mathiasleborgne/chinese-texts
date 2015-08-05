@@ -31,8 +31,8 @@ class TextForm(forms.ModelForm):
 
     class Meta:
         model = Text
-        exclude = ('date_release', 'date_writing',
-                   'content_pinyin', 'title_pinyin')
+        fields = ("title_english", "title_chinese", "author",
+                  "content_english", "content_chinese", )
 
     def __init__(self, *args, **kwargs):
         super(TextForm, self).__init__(*args, **kwargs)
@@ -68,7 +68,7 @@ class TextForm(forms.ModelForm):
 class AuthorForm(forms.ModelForm):
     class Meta:
         model = Author
-        exclude = ("year_birth", "year_death")
+        fields = ("name_chinese", "name_pinyin",)
 
     def __init__(self, *args, **kwargs):
         super(AuthorForm, self).__init__(*args, **kwargs)
