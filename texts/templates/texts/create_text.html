@@ -6,6 +6,11 @@
 
 {% block content %}
 
-{% crispy form form.helper %}
+{% if user.is_authenticated %}
+    {% crispy form form.helper %}
+{% else %}
+    <p>Sorry, you have to <a href="/log_in">log in</a> to modify the content.</p>
+{% endif %}
+
 
 {% endblock %}

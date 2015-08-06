@@ -2,12 +2,19 @@
 {% block title %}Delete Text{% endblock %}
 {% block content %}
 
-<h1>do you really want to delete this text?</h1>
+{% if user.is_authenticated %}
+    <h1>do you really want to delete this text?</h1>
 
-<form method="post" action="">
-   {% csrf_token %}
-   <input type="submit" value="Delete" /> - <a href="/home">Well, no actually</a>
-   <!-- todo return to text if don't delete -->
-</form>
+    <form method="post" action="">
+       {% csrf_token %}
+       <input type="submit" value="Delete" /> - <a href="/home">Well, no actually</a>
+       <!-- todo return to text if don't delete -->
+    </form>
+{% else %}
+    <p>Sorry, you have to <a href="/log_in">log in</a> to modify the content.</p>
+{% endif %}
+
+
+
 
 {% endblock %}
