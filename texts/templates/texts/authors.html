@@ -5,7 +5,7 @@
 <h1>All Authors</h1>
 
 <ul class="list-group">
-{% for author in authors %}
+{% for author in authors|dictsort:"name_pinyin" %}
   <li class="list-group-item">
     <span class="badge">{{ author.count_texts }}</span>
     <a href="{% url "author_page" author.id %}">{{ author.name_pinyin }}</a>

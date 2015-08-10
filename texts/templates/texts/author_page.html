@@ -23,7 +23,7 @@
 <h2>Texts:</h2>
 
 <ul class="list-group">
-{% for text in texts %}
+{% for text in texts|dictsort:"title_english" %}
     <li class="list-group-item">
         <span class="badge"><a href="{% url "read_text" text.id %}">Read</a></span>
         <a href="{% url "read_text" text.id %}">{{ text.title_english }}</a>
