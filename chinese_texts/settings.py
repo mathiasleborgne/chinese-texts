@@ -57,8 +57,14 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'crispy_forms',
     # In production environments, always activate Django template cache loader.
+    'django.contrib.sites',
+    'django_comments',
     'texts',
 )
+
+
+SITE_ID = 1  # todo: what does it mean?
+
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 

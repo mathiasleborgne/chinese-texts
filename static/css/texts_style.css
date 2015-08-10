@@ -61,3 +61,7 @@ body {
 footer {
     font-size: 80%;
 }
+
+#id_honeypot {
+    display: none;
+}
