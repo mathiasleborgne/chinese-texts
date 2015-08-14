@@ -21,15 +21,18 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'du^ocg1a^x!f**3=0)0(#qn-pwff2_th+o7wh0#*wgew5!8c5crdfu'
-
 # settings.py
 
 import socket
 
 machine_name = 'ALD-0986-DE'
 is_local_machine = socket.gethostname() == machine_name  # debug vs prod
+
+# SECURITY WARNING: keep the secret key used in production secret!
+if is_local_machine:
+    SECRET_KEY = 'du^ocg1a^x!f**3=0)0(#qn-pwff2_th+o7wh0#*wgew5!8c5crdfu'
+else:
+    SECRET_KEY = os.environ["SECRET_KEY"]
 
 if is_local_machine:
     print "You're running in local on machine:", machine_name
