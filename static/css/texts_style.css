@@ -39,7 +39,7 @@ body {
     height: 50px;
 }
 
-#search_button {
+.seal-btn {
     background-color: #C41B00;
     border-color: #C41B00;
 }

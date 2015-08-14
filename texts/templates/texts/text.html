@@ -97,11 +97,11 @@
             {% endif %}
         </div class="row">
     </div>
-    {% if user.is_authenticated %}
-        <p><a href="{% url "update_text" text.id %}">Modify</a></p>
-    {% endif %}
 </div>
 
+<a href="{% url "update_text" text.id %}">
+    <button type="submit" class="btn btn-primary btn-sm seal-btn"><span class="glyphicon glyphicon-pencil"></span> Modify</button>
+</a>
 
 <link rel="stylesheet" href="{% static 'css/comments.css' %}">
 
@@ -146,7 +146,7 @@
                     {{ form.timestamp }}
                     {{ form.security_hash }}
                     <input type="hidden" name="next" value="{% url 'read_text' text.id %}" />
-                    <input type="submit" value="Add comment" id="id_submit" />
+                    <button type="submit" class="btn btn-primary btn-sm seal-btn" id="id_submit"><span class="glyphicon glyphicon-leaf"></span> Add Comment</button>
                     </form>
                 {% else %}
                     You need to <a href="/log_in">log in</a> to leave a comment.
