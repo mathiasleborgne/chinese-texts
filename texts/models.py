@@ -5,6 +5,9 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 import operator
 import json
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 
 class Text(models.Model):
@@ -108,6 +111,20 @@ class Text(models.Model):
                       for char_object in char_objects
                       if char_object is not None]
         self.chars_data = json.dumps(chars_data)
+
+
+@receiver(post_save, sender=Text)
+def delete_text_metadata_after_edit(sender, instance, using, raw, created,
+                                    **kwargs):
+    print "delete_text_metadata_after_edit", instance.chars_data
+    if instance.chars_data is not None or instance.content_pinyin is not None:
+        instance.chars_data = None
+        instance.content_pinyin = None
+        instance.save()
+        print "delete_text_metadata_after_edit, after:", instance.chars_data
+    else:
+        print "delete_text_metadata_after_edit, after: no chars_data"
+
 
 
 class TextLine(object):
