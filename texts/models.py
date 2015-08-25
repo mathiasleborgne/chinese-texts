@@ -5,9 +5,9 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 import operator
 import json
-from django.db.models.signals import post_save
 from django.dispatch import receiver
-
+from texts.text_processing import check_process_text
+from texts.char_data import CharData, get_unicode
 
 
 class Text(models.Model):
@@ -112,20 +112,19 @@ class Text(models.Model):
                       if char_object is not None]
         self.chars_data = json.dumps(chars_data)
 
+    def save(self, *args, **kwargs):
+        if self.pk is not None:
+            original_text = Text.objects.get(pk=self.pk)
+            check_process_text(self, original_text)
+            self.save_no_parsing()
+        else:
+            super(Text, self).save(*args, **kwargs)
 
-@receiver(post_save, sender=Text)
-def delete_text_metadata_after_edit(sender, instance, using, raw, created,
-                                    **kwargs):
-    print "delete_text_metadata_after_edit", instance.chars_data
-    if instance.chars_data is not None or instance.content_pinyin is not None:
-        instance.chars_data = None
-        instance.content_pinyin = None
-        instance.save()
-        print "delete_text_metadata_after_edit, after:", instance.chars_data
-    else:
-        print "delete_text_metadata_after_edit, after: no chars_data"
-
-
+    def save_no_parsing(self):
+        """ every generic save will run the characters parsing, so we can
+            use this function to avoid it
+        """
+        super(Text, self).save()
 
 class TextLine(object):
     """docstring for TextLine"""
@@ -155,66 +154,6 @@ def split_lines_chardata(chars_data):
             return [head] + split_lines_chardata(queue)
         except IndexError, error:
             return [head]
-
-
-
-class CharData(object):
-    """Metadata for chinese character
-    """
-
-    special_characters = [
-        "。", "，", "?", "；", "？", "！",
-    ]
-    line_break = "\n"
-    strange_character = "\r"
-
-    def __init__(self, character_simplified, character_traditional,
-                 pinyin, translation):
-        """ Class for character metadata handling
-            Character_traditional can be None, not character_simplified
-        """
-        super(CharData, self).__init__()
-        if character_simplified is None:
-            raise Exception("wrong character data")
-        self.character_simplified = character_simplified
-        self.character_traditional = character_traditional \
-            if character_traditional is not None else character_simplified
-        self.is_line_break = character_simplified == self.line_break
-        self.is_special_character = \
-            character_simplified.encode("utf-8") in self.special_characters
-        self.translation = translation
-        self.pinyin = pinyin
-
-    @classmethod
-    def from_json(cls, item_json):
-        "Initialize CharData from a json serialization"
-        character_simplified = item_json[0]
-        if len(item_json) < 4:
-            character_traditional = None
-            pinyin = None
-            translation = None
-        else:
-            character_traditional = item_json[1]
-            pinyin = item_json[2]
-            translation = item_json[3]
-        return cls(character_simplified, character_traditional,
-                   pinyin, translation)
-
-    @classmethod
-    def from_line_break(cls):
-        return cls("\n", None, None, None)
-
-    @classmethod
-    def from_special_character(cls, character_simplified):
-        return cls(character_simplified, None, None, None)
-
-    def get_JSONable_item(self):
-        if self.is_line_break:
-            return [self.character_simplified]
-        else:
-            return [self.character_simplified, self.character_traditional,
-                    self.pinyin, self.translation]
-
 
 
 class Author(models.Model):

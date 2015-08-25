@@ -1,30 +1,14 @@
 #-*- coding: utf-8 -*-
 
 import os
-import urllib2
-from bs4 import BeautifulSoup
-from django.db.utils import DataError
-import argparse
-
 os.environ['DJANGO_SETTINGS_MODULE'] = 'chinese_texts.settings'
 from texts.models import Text, Author
 import django
 django.setup()
 
+from django.db.utils import DataError
+from texts.scraping.scraping_tools import get_parser, get_html, get_soup
 
-def get_parser():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--many_items",
-                        action="store_true",
-                        help="Run test on many items")
-    parser.add_argument("--fill_db",
-                        action="store_true",
-                        help="Actually change the database")
-    parser.add_argument("--reset_db",
-                        action="store_true",
-                        help="Re-fetch pinyin for all texts in the db, instead"
-                             " of only fetching the texts without pinyin")
-    return parser
 
 def get_texts_parser():
     parser = get_parser()
@@ -48,7 +32,7 @@ class TextScraper(object):
         print "parsing", len(poem_urls), "urls"
         for poem_url in poem_urls:
             print "Getting poem at:", poem_url
-            self.soup = BeautifulSoup(get_html(poem_url), 'html.parser')
+            self.soup = get_soup(poem_url)
             try:
                 self.parse_html()
             except AttributeError, error:
@@ -205,7 +189,7 @@ class DuFuScraper(TextScraper):
 
     def get_all_poems_urls(self):
         url_root = "http://www.chinese-poems.com/du.html"
-        soup = BeautifulSoup(get_html(url_root), 'html.parser')
+        soup = get_soup(url_root)
 
         def is_poem_link(tag):
             return tag.name == 'a' and tag["href"][0] == 'd'
@@ -278,11 +262,6 @@ class DuFuScraper(TextScraper):
 
         return (split_linebreak(self.content_chinese_raw),
                 split_linebreak(self.content_pinyin_raw))
-
-
-def get_html(url):
-    response = urllib2.urlopen(url)
-    return response.read()
 
 
 def remove_all(list_filter, element):
