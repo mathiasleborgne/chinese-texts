@@ -12,3 +12,4 @@ beautifulsoup4==4.0.2
 django-crispy-forms==1.4.0
 wikipedia==1.4.0
 django-contrib-comments==1.6.1
+sendgrid>=0.5.0

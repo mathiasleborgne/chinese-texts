@@ -28,6 +28,24 @@ import socket
 machine_name = 'ALD-0986-DE'
 is_local_machine = socket.gethostname() == machine_name  # debug vs prod
 
+DEFAULT_FROM_EMAIL = 'mathias.leborgne@gmail.com'
+if is_local_machine:
+    # run: python -m smtpd -n -c DebuggingServer localhost:1025
+    EMAIL_HOST = 'localhost'
+    EMAIL_PORT = 1025
+    EMAIL_HOST_USER = ''
+    EMAIL_HOST_PASSWORD = ''
+    EMAIL_USE_TLS = False
+    # EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+    # EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'tmp')
+else:
+    EMAIL_HOST_USER = os.environ['SENDGRID_USERNAME']
+    EMAIL_HOST= 'smtp.sendgrid.net'
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_PASSWORD = os.environ['SENDGRID_PASSWORD']
+
+
 # SECURITY WARNING: keep the secret key used in production secret!
 if is_local_machine:
     SECRET_KEY = 'du^ocg1a^x!f**3=0)0(#qn-pwff2_th+o7wh0#*wgew5!8c5crdfu'
@@ -174,3 +192,4 @@ SEND_BROKEN_LINK_EMAILS = True
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
