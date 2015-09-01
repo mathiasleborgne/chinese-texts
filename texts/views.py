@@ -25,7 +25,7 @@ def make_template_name(suffix):
 
 class TextList(ListView):
     model = Text
-    context_object_name = "latest_texts"
+    context_object_name = "texts"
     template_name = make_template_name("home")
     paginate_by = 6
 

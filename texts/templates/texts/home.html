@@ -7,7 +7,7 @@
 </p>
 
 <ul class="list-group">
-{% for text in latest_texts %}
+{% for text in texts %}
     <li class="list-group-item clearfix">
         <h3 class="list-group-item-heading">
             <a href="{% url "read_text" text.id %}">{{ text.title_english }}</a>

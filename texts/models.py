@@ -28,6 +28,10 @@ class Text(models.Model):
     # http://stackoverflow.com/questions/1110153/what-is-the-most-efficent-way-to-store-a-list-in-the-django-models
     view_count = models.PositiveIntegerField(default=0)
 
+
+    class Meta:
+        ordering = ['chars_data', 'content_pinyin']
+
     def __str__(self):
         return self.title_english
 
