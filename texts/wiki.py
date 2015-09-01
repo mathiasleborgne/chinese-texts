@@ -17,25 +17,25 @@ def get_wiki_parser():
     return parser
 
 
-def get_authors_names(fill_db, many_items):  # usused for now
-    if fill_db:
-        authors_db = get_all_authors()
-        print authors_db
-        authors_list = [author.name_pinyin for author in authors_db]
-    else:
-        if many_items:
+def get_authors_names(print_only, few_items):  # usused for now
+    if print_only:
+        if few_items:
+            authors_list = ["Du Fu", "Zhuangzi", "Tao Yuanming"]
+        else:
             authors_list = \
                 ["Tao Yuanming", "Meng Haoran", "Zhang Jiuling", "Meng Haoran",
                  "Wang Changling", "Qiwu Qian", "Wei Yingwu", "Liu Zongyuan",
                  "Bai Juyi", "Li Shangyin"]
-        else:
-            authors_list = ["Du Fu", "Zhuangzi", "Tao Yuanming"]
+    else:
+        authors_db = get_all_authors()
+        print authors_db
+        authors_list = [author.name_pinyin for author in authors_db]
     return authors_list
 
 
-def get_all_authors(many_items):
+def get_all_authors(few_items):
     all_authors = Author.objects.all()
-    return all_authors if many_items else all_authors[:3]
+    return all_authors if not few_items else all_authors[:3]
 
 
 def find_dates(categories):
@@ -74,7 +74,7 @@ def print_dates_bio(name_pinyin, biography, year_birth, year_death):
 if __name__ == "__main__":
     args = get_wiki_parser().parse_args()
 
-    for author in get_all_authors(args.many_items):
+    for author in get_all_authors(args.few_items):
         # fetch wikipedia page
         name_author = author.name_pinyin
         try:
@@ -91,10 +91,10 @@ if __name__ == "__main__":
         (year_birth, year_death) = find_dates(page_author.categories)
         print_dates_bio(name_author, biography, year_birth, year_death)
 
-        if args.fill_db:
+        if not args.print_only:
             save_author_infos(author, biography,
                               year_birth, year_death, args.save_dates)
             print "Checking Database:"
-            for author in get_all_authors(args.many_items):
+            for author in get_all_authors(args.few_items):
                 print_dates_bio(author.name_pinyin, author.biography,
                                 author.year_birth,author.year_death)

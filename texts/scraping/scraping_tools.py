@@ -5,16 +5,21 @@ from bs4 import BeautifulSoup
 
 def get_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--many_items",
+    parser.add_argument("--few_items",
                         action="store_true",
-                        help="Run test on many items")
-    parser.add_argument("--fill_db",
+                        help="Run test on a few items")
+    parser.add_argument("--print_only",
                         action="store_true",
-                        help="Actually change the database")
-    parser.add_argument("--reset_db",
+                        help="Don't actually change the database")
+    parser.add_argument("--preserve_db",
                         action="store_true",
-                        help="Re-fetch pinyin for all texts in the db, instead"
-                             " of only fetching the texts without pinyin")
+                        help="Anly re-fetch data for texts without data")
+    parser.add_argument("--few_characters",
+                        action="store_true",
+                        help="Get only a few characters from the texts")
+    parser.add_argument("--verbose",
+                        action="store_true",
+                        help="A lot of logs")
     return parser
 
 

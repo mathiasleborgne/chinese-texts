@@ -17,19 +17,19 @@ def get_all_texts(args):
     if args.select_text is not None:
         return Text.objects.filter(title_english=args.select_text)
     all_texts = Text.objects.all()
-    if not args.reset_db:
+    if args.preserve_db:
         for text in all_texts:
             if text.chars_data is not None:
                 print "Not processing text:", text.title_english
         all_texts = [text for text in all_texts if text.chars_data is None]
-    return all_texts if args.many_items else all_texts[:2]
+    return all_texts if not args.few_items else all_texts[:2]
 
 
 def get_texts_with_metadata(args):
     all_texts =  [text for text in Text.objects.all()
                   if text.chars_data is not None
-                  and (text.content_pinyin is None or args.reset_db)]
-    return all_texts if args.many_items else all_texts[:2]
+                  and (text.content_pinyin is None or not args.preserve_db)]
+    return all_texts if not args.few_items else all_texts[:2]
 
 
 if __name__ == "__main__":
@@ -43,4 +43,4 @@ if __name__ == "__main__":
         texts = get_all_texts(args)
         print "Getting metadata for", len(texts), "texts"
         for text in texts:
-            MetadataParser(text, args).make_metadata()
+            MetadataParser(text, None, args).make_metadata()

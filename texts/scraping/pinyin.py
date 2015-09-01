@@ -11,14 +11,8 @@ url_sample = "http://www.unicode.org/cgi-bin/GetUnihanData.pl?codepoint=国"
 
 def get_pinyin_parser():
     parser = get_parser()
-    parser.add_argument("--all_characters",
-                        action="store_true",
-                        help="Get all all characters from the texts")
     parser.add_argument("--select_text", default=None,
                         help="Select an text")
-    parser.add_argument("--verbose",
-                        action="store_true",
-                        help="A lot of logs")
     parser.add_argument("--content_pinyin",
                         action="store_true",
                         help="Only fill content_pinyin from texts with "
@@ -31,10 +25,10 @@ class FakeArgs(object):
 
     def __init__(self, text):
         super(FakeArgs, self).__init__()
-        self.many_items = True
-        self.fill_db = False
-        self.reset_db = True
-        self.all_characters = True
+        self.few_items = False
+        self.print_only = True
+        self.preserve_db = False
+        self.few_characters = False
         self.select_text = text.title_english
         self.verbose = True
         self.content_pinyin = False
@@ -129,11 +123,12 @@ class MetadataParser(object):
             print "Getting data for text:", self.text.title_english
             get_char_data_no_arg = \
                 (lambda char: self.get_char_data(char))
-            self.text.make_json(get_char_data_no_arg, self.args.all_characters)
+            self.text.make_json(get_char_data_no_arg,
+                                not self.args.few_characters)
             if self.args.verbose:
                 print "JSON encoding for text:", self.text.chars_data
                 print
-            if self.args.fill_db:
+            if not self.args.print_only:
                 self.text.save_no_parsing()
         except KeyboardInterrupt, error:
             print
@@ -150,6 +145,10 @@ class MetadataParser(object):
     def fill_content_pinyin(self):
         chars_data = self.text.get_all_chars_data()
 
+        if chars_data is None:
+            print "No chars_data found for:", self.text.title_english
+            return
+
         def get_pinyin_content(char_data):
             if char_data.pinyin is not None:
                 return char_data.pinyin
@@ -160,7 +159,7 @@ class MetadataParser(object):
                                    for char_data in chars_data])
         self.text.content_pinyin = content_pinyin
         print "got content_pinyin:", content_pinyin[:50], "..."
-        if self.args.fill_db:
+        if not self.args.print_only:
             self.text.save_no_parsing()
 
     def save_in_dictionary(self):

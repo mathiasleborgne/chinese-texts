@@ -8,6 +8,7 @@ django.setup()
 
 from django.db.utils import DataError
 from texts.scraping.scraping_tools import get_parser, get_html, get_soup
+from texts.scraping.pinyin import MetadataParser
 
 
 def get_texts_parser():
@@ -27,7 +28,7 @@ class TextScraper(object):
         self.args = args
         print "Find all URLs"
         poem_urls = self.get_all_poems_urls()
-        if not self.args.many_items:
+        if self.args.few_items:
             poem_urls = poem_urls[:3]
         print "parsing", len(poem_urls), "urls"
         for poem_url in poem_urls:
@@ -43,8 +44,12 @@ class TextScraper(object):
             except RuntimeError, error:
                 continue
             self.print_info()
-            if self.args.fill_db:
+            self.make_text()
+            self.get_text_metadata()
+
+            if not self.args.print_only:
                 self.add_text_to_db()
+
 
 
     def get_author(self):
@@ -70,10 +75,10 @@ class TextScraper(object):
         pass
 
     def print_info(self):
-        if self.args.fill_db:
+        if not self.args.print_only:
             print "title:", self.title_english
             print "content:", (self.content_english_pretty[:20] + "...") \
-                if self.args.fill_db else self.content_english_pretty
+                if not self.args.print_only else self.content_english_pretty
         else:
             print
             print "content english:", self.content_english_pretty
@@ -101,23 +106,30 @@ class TextScraper(object):
     def make_author(self):
         pass
 
-    def add_text_to_db(self):
+    def make_text(self):
         author = self.get_author()
+        self.text = Text(title_english=self.title_english,
+                         title_chinese=self.title_chinese,
+                         title_pinyin=self.title_pinyin,
+                         author=author,
+                         content_english=self.content_english_pretty,
+                         content_chinese=self.content_chinese_pretty,
+                         content_pinyin=self.content_pinyin_pretty)
+
+    def get_text_metadata(self):
+        metadata_parser = MetadataParser(self.text, None, args)
+        metadata_parser.make_metadata()
+
+
+    def add_text_to_db(self):
         texts = Text.objects.filter(title_english=self.title_english)
-        if texts and not self.args.reset_db:
+        if texts and self.args.preserve_db:
             print "Not replacing text:", self.title_english
             return
         try:
             remove_text_duplicate(texts)
-            text = Text(title_english=self.title_english,
-                        title_chinese=self.title_chinese,
-                        title_pinyin=self.title_pinyin,
-                        author=author,
-                        content_english=self.content_english_pretty,
-                        content_chinese=self.content_chinese_pretty,
-                        content_pinyin=self.content_pinyin_pretty)
             print "save text:", self.title_english
-            text.save()
+            self.text.save()
         except DataError, error:
             print "DB error, couldn't save text:", self.title_english, "-", error
 
@@ -140,7 +152,7 @@ class WenguScraper(TextScraper):
 
     def print_info(self):
         super(WenguScraper, self).print_info()
-        if self.args.fill_db:
+        if self.args.verbose:
             print "Author:"
             print "  name_pinyin:", self.name_pinyin
             print "  name_chinese:", self.name_chinese
@@ -275,7 +287,7 @@ def remove_str(content, str_to_remove, start_at=0):
 
 def remove_text_duplicate(texts):
     for text in texts:
-        print "removing:", title_english
+        print "removing:", text.title_english
         text.delete()
 
 
