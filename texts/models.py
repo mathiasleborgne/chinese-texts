@@ -61,22 +61,32 @@ class Text(models.Model):
         return views_sum
 
 
-    def content_lines(self):
+    def get_lines(self):
         lines_chinese = split_lines(self.content_chinese)
-        chars_data_decoded = self.get_all_chars_data()
         if self.content_pinyin is None:
             lines_pinyin = [None for _ in lines_chinese]
         else:
             lines_pinyin = split_lines(self.content_pinyin)
         lines_english = split_lines(self.content_english)
 
+        return (lines_chinese, lines_english, lines_pinyin)
+
+
+    def check_lines(self):
+        (lines_chinese, lines_english, lines_pinyin) = self.get_lines()
+        return (len(lines_chinese) == len(lines_pinyin) == \
+                len(lines_english))
+
+    def content_lines(self):
+        chars_data_decoded = self.get_all_chars_data()
+        (lines_chinese, lines_english, lines_pinyin) = self.get_lines()
+
         def print_lines(lines):
             """for debug"""
             for index_line, line in enumerate(lines):
                 print index_line, "-", line
 
-        if not (len(lines_chinese) == len(lines_pinyin) == \
-                len(lines_english)):
+        if not self.check_lines():
             return None
         if chars_data_decoded is not None:
             lines_char_data = split_lines_chardata(chars_data_decoded)

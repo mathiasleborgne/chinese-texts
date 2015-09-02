@@ -45,12 +45,14 @@ class TextScraper(object):
                 continue
             self.print_info()
             self.make_text()
+            if not self.text.check_lines():
+                print "Bad lines alignement for text:", \
+                    self.text.title_english, "- not saving"
+                continue
             self.get_text_metadata()
 
             if not self.args.print_only:
                 self.add_text_to_db()
-
-
 
     def get_author(self):
         pass
