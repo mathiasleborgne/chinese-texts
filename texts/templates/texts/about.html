@@ -1,20 +1,106 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}About{% endblock %}
 
 {% block content %}
-<h1>Ni hao!</h1>
-<p>
-    I love Chinese literature, and I like seeing the original Chinese text when reading some.
-    I'll try to publish some of my favorite texts here, and it would be great if you could help.
-    You can <a href="/create_user">sign up</a> to add the texts you love, comment them, and more soon.
-    {% if user.is_authenticated %}
-        So far we already have {{ texts_count }} texts, and {{ all_views_count }} views.
-    {% else %}
-        So far we already have {{ texts_count }} texts!
-    {% endif %}
-</p>
-<p>Thanks!</p>
-<p>Mathias</p>
-<p>PS: I'd love to <a href="mailto:mathias.leborgne@gmail.com">hear from you</a>!</p>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-default dropdown-toggle"
+             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="glyphicon glyphicon-option-vertical"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="#" class="btn-pinyin">
+                    <span class="pinyin_collapse">No Pinyin</span>
+                    <span class="pinyin_collapse" style="display: none">Pinyin</span>
+                </a></li>
+                <li><a href="#" class="btn-traditional">
+                    <span class="char_traditional">Traditional</span>
+                    <span class="char_traditional" style="display: none">Simplified</span>
+                </a></li>
+            </ul>
+        </div>
+        <h1>碑林 <small>Stele Forest</small></h1>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-3" id="panel_text">
+                <span data-toggle="popover" data-trigger="hover" data-placement="top"
+                 title="nín" data-content="you">
+                    <span class="char_traditional">您</span>
+                    <span class="char_traditional" style="display: none">您</span>
+                </span>
+                <span data-toggle="popover" data-trigger="hover" data-placement="top"
+                 title="hǎo" data-content="good">
+                    <span class="char_traditional">好</span>
+                    <span class="char_traditional" style="display: none">好</span>
+                </span>
+                !
+            </div>
+            <div class="col-sm-9" id="panel_text">
+                Hello!
+            </div>
+            <div class="pinyin_collapse">
+                <div class="col-sm-12" id="pinyin_small">
+                    nín hǎo !
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-sm-12">
+    <div class="col-sm-3">
+        <img id="about-image" src="{% static 'img/shitao_seal.jpeg' %}" class="img-thumbnail" alt="Seal">
+    </div>
+    <div class="col-sm-9 about-text">
+        <p>
+            You love Chinese literature, but you can't read Ancient Chinese fluently,
+            and translation alone is not enough?
+            Here you will find some classical Chinese texts, in a bilingual format,
+            with some extra information:
+            characters meaning, pinyin, traditional characters, commentaries,
+            and more to come!
+            I hope you will find it useful.
+        </p>
+        <p>
+            If you feel like contributing, you can <a href="/create_user">sign up</a>
+            to add the texts you love, comment them, and more.
+            {% if user.is_authenticated %}
+                So far we already have {{ texts_count }} texts, and {{ all_views_count }} views.
+            {% else %}
+                So far we already have {{ texts_count }} texts!
+            {% endif %}
+            If you have any suggestion, or if you just want to say 您好, don't hesitate to <a href="mailto:mathias.leborgne@gmail.com">contact me</a>.
+        </p>
+        <p>Thanks!</p>
+        <p>Mathias</p>
+    </div>
+</div>
+
+
+<script>
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover();
+});
+</script>
+
+
+<script>
+$(document).ready(function(){
+    $(".btn-pinyin").click(function(){
+        $(".pinyin_collapse").toggle()
+    });
+});
+
+$(document).ready(function(){
+    $(".btn-traditional").click(function(){
+        $(".char_traditional").toggle()
+    });
+});
+</script>
+
 
 {% endblock %}

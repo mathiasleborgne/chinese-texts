@@ -65,3 +65,11 @@ footer {
 #id_honeypot {
     display: none;
 }
+
+.about-image-text {
+    font-size: 50%;
+}
+
+.about-text {
+    font-size: 120%;
+}
