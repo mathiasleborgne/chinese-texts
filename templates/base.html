@@ -3,10 +3,11 @@
 <html lang="en">
 <head>
     <title>
-        Stele Forest - {% block title %}Home{% endblock %}
+        Stele Forest, bilingual display of classical chinese texts - {% block title %}Home{% endblock %}
     </title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Bilingual display of classical chinese texts" />
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'css/texts_style.css' %}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -18,7 +19,7 @@
 <div class ="container">
     <nav class="navbar navbar-inverse">
         <ul class="nav navbar-nav">
-            <li><img class="img-responsive" src="{% static 'img/stele_forest_characters.jpeg' %}" alt="碑林" id="logo"></img></li>
+            <li><img class="img-responsive" src="{% static 'img/stele_forest_characters.jpeg' %}" alt="碑林 - Stele Forest" id="logo"></img></li>
             <li class="active"><a href="{% url "texts_list" %}">Stele Forest</a></li>
 
             <li class="dropdown">
