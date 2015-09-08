@@ -189,3 +189,6 @@ def about(request):
     texts_count = Text.count_texts()
     all_views_count = Text.count_all_views()
     return render(request, make_template_name("about"), locals())
+
+def poll(request):
+    return render(request, make_template_name("poll"), locals())
