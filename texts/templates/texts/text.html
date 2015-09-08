@@ -149,7 +149,7 @@
                     <button type="submit" class="btn btn-primary btn-sm seal-btn" id="id_submit"><span class="glyphicon glyphicon-leaf"></span> Add Comment</button>
                     </form>
                 {% else %}
-                    You need to <a href="/log_in">log in</a> to leave a comment.
+                    You need to <a href="{% url "log_in" %}">log in</a> to leave a comment.
                 {% endif %}
 
 

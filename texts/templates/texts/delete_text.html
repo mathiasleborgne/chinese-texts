@@ -7,11 +7,11 @@
 
     <form method="post" action="">
        {% csrf_token %}
-       <input type="submit" value="Delete" /> - <a href="/home">Well, no actually</a>
+       <input type="submit" value="Delete" /> - <a href="{% url "home" %}">Well, no actually</a>
        <!-- todo return to text if don't delete -->
     </form>
 {% else %}
-    <p>Sorry, you have to <a href="/log_in">log in</a> to modify the content.</p>
+    <p>Sorry, you have to <a href="{% url "log_in" %}">log in</a> to modify the content.</p>
 {% endif %}
 
 

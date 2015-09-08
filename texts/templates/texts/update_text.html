@@ -10,7 +10,7 @@
     {% crispy form form.helper %}
     <p><a href="{% url "delete_text" text.id %}">Delete</a></p>
 {% else %}
-    <p>Sorry, you have to <a href="/log_in">log in</a> to modify the content.</p>
+    <p>Sorry, you have to <a href="{% url "log_in" %}">log in</a> to modify the content.</p>
 {% endif %}
 
 

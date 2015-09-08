@@ -66,7 +66,7 @@
             I hope you will find it useful.
         </p>
         <p>
-            If you feel like contributing, you can <a href="/create_user">sign up</a>
+            If you feel like contributing, you can <a href="{% url "create_user" %}">sign up</a>
             to add the texts you love, comment them, and more.
             {% if user.is_authenticated %}
                 So far we already have {{ texts_count }} texts, and {{ all_views_count }} views.

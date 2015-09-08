@@ -9,7 +9,7 @@
 {% if user.is_authenticated %}
     {% crispy form %}
 {% else %}
-    <p>Sorry, you have to <a href="/log_in">log in</a> to modify the content.</p>
+    <p>Sorry, you have to <a href="{% url "log_in" %}">log in</a> to modify the content.</p>
 {% endif %}
 
 

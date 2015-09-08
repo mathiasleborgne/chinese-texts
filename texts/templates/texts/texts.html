@@ -10,9 +10,9 @@
 {% for text in texts %}
     <li class="list-group-item clearfix">
         <h3 class="list-group-item-heading">
-            <a href="{% url "read_text" text.id %}">{{ text.title_english }}</a>
-            <small> - <a href="{% url "author_page" text.author.id %}">{{ text.author.name_pinyin }}</a></small>
-            <small> <span class="label label-default pull-right"><a href="{% url "read_text" text.id %}">Read</a></span></small>
+            <a href="{% url "read-text" text.id %}">{{ text.title_english }}</a>
+            <small> - <a href="{% url "author-page" text.author.id %}">{{ text.author.name_pinyin }}</a></small>
+            <small> <span class="label label-default pull-right"><a href="{% url "read-text" text.id %}">Read</a></span></small>
         </h3>
         <p class="list-group-item-text">
           <div class="col-xs-3">
