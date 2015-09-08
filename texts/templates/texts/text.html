@@ -4,7 +4,7 @@
 {% load comments %}
 {% load crispy_forms_tags %}
 
-{% block title %}Poem - {{ text.title_chinese }}{% endblock %}
+{% block title %} {{ text.title_english }} - {{ text.author.name_pinyin }}{% endblock %}
 {% block content %}
 
 <div class="panel panel-default">
