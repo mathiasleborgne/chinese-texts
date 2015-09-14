@@ -26,7 +26,7 @@ def make_template_name(suffix):
 class TextList(ListView):
     model = Text
     context_object_name = "texts"
-    template_name = make_template_name("home")
+    template_name = make_template_name("texts")
     paginate_by = 6
 
 
@@ -127,7 +127,7 @@ class TextDelete(DeleteView):
     model = Text
     template_name = make_template_name("delete_text")
     context_object_name = "text"
-    success_url = "/home"
+    success_url = "/texts"
 
 
 class AuthorCreate(CreateView):

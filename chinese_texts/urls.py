@@ -27,7 +27,6 @@ from texts.views import TextList, ReadText, TextUpdate, TextCreate, \
 urlpatterns = patterns(
     'texts.views',
     url(r'^$', TextList.as_view(), name='texts_list'),
-    url(r'^home$', TextList.as_view(), name='home'),
     url(r'^text/(?P<pk>\d+)$', ReadText.as_view(), name='read_text'),
     url(r'^authors$', AuthorList.as_view(), name='authors'),
     url(r'^author-page/(?P<pk>\d+)$', AuthorView.as_view(), name='author_page'),
@@ -42,7 +41,8 @@ urlpatterns = patterns(
     url(r'^new-text/$', TextCreate.as_view(), name='new_text'),
     url(r'^update-text/(?P<pk>\d+)$', TextUpdate.as_view(),
         name='update_text'),
-    url(r'^update-text/update-success$', 'update_success', name="update_text"),
+    url(r'^update-text/update-success$', 'update_success',
+            name="update_text_success"),
     url(r'^delete-text/(?P<pk>\d+)$', TextDelete.as_view(),
         name='delete_text'),
     url(r'^comments/', include('django_comments.urls')),
