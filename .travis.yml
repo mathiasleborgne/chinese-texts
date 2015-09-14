@@ -8,4 +8,6 @@ deploy:
   app: steleforest
   on:
     repo: mathiasleborgne/chinese-texts
-script: "python texts/socket_utility_script.py "
+script:
+  - "python texts/socket_utility_script.py "
+  - "python manage.py test"

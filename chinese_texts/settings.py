@@ -26,10 +26,20 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 import socket
 
 machine_name = 'ALD-0986-DE'
-is_local_machine = socket.gethostname() == machine_name  # debug vs prod
+host_name = socket.gethostname()
+if host_name == machine_name:
+    settings_type = "local_machine"
+elif "testing-worker" in host_name:
+    settings_type = "travis"
+else:
+    settings_type = "heroku"
+
+is_not_prod_settings = \
+    settings_type == "local_machine" \
+    or settings_type == "travis"
 
 DEFAULT_FROM_EMAIL = 'mathias.leborgne@gmail.com'
-if is_local_machine:
+if is_not_prod_settings:
     # run: python -m smtpd -n -c DebuggingServer localhost:1025
     EMAIL_HOST = 'localhost'
     EMAIL_PORT = 1025
@@ -47,12 +57,12 @@ else:
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-if is_local_machine:
+if is_not_prod_settings:
     SECRET_KEY = 'du^ocg1a^x!f**3=0)0(#qn-pwff2_th+o7wh0#*wgew5!8c5crdfu'
 else:
     SECRET_KEY = os.environ["SECRET_KEY"]
 
-if is_local_machine:
+if is_not_prod_settings:
     print "You're running in local on machine:", machine_name
     DEBUG = TEMPLATE_DEBUG = True
 else:
@@ -131,7 +141,7 @@ WSGI_APPLICATION = 'chinese_texts.wsgi.application'
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 # Heroku: Parse database configuration from $DATABASE_URL
-if is_local_machine:
+if is_not_prod_settings:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
