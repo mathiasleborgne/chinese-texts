@@ -2,8 +2,10 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
-<h1>Welcome to Stele Forest{% if user.is_authenticated %} {{ user.username }}{% endif %}!</h1>
-<p>Here you will find some classical chinese texts. You can even <a href="{% url "new_text" %}">add your own</a>!
+<h1>SteleForest: bilingual Chinese texts</h1>
+<p>Welcome to Stele Forest{% if user.is_authenticated %} {{ user.username }}{% endif %}!
+   Here you will find some classical chinese texts, displayed in a pretty bilingual Chinese-English format.
+   You can even <a href="{% url "new_text" %}">add your own texts</a>!
 </p>
 
 <ul class="list-group">
