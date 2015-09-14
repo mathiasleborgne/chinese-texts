@@ -1,4 +1,6 @@
 language: python
+python:
+  - "2.7"
 deploy:
   provider: heroku
   api_key:
@@ -6,4 +8,4 @@ deploy:
   app: steleforest
   on:
     repo: mathiasleborgne/chinese-texts
-script: "pwd"
+script: "python manage.py test"
