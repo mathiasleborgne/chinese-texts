@@ -1,6 +1,10 @@
+# see: www.calazan.com/auto-deploy-your-django-app-to-heroku-with-travis-ci-on-git-push/
 language: python
 python:
   - "2.7"
+install:
+  - pip install -r requirements.txt
+  - pip install coveralls
 deploy:
   provider: heroku
   api_key:
@@ -10,4 +14,7 @@ deploy:
     repo: mathiasleborgne/chinese-texts
 script:
   - "python texts/socket_utility_script.py "
-  - "python manage.py test"
+  - "coverage run --source=. manage.py test"
+after_success:
+  coveralls
+
