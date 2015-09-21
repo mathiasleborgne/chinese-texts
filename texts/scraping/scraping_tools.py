@@ -24,7 +24,8 @@ def get_parser():
 
 
 def get_html(url):
-    response = urllib2.urlopen(url)
+    request = urllib2.Request(url, headers={'User-Agent' : "Magic Browser"})
+    response = urllib2.urlopen(request)
     return response.read()
 
 
