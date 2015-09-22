@@ -16,6 +16,7 @@
     You are connected, {{ user.username }}!
 {% else %}
     {% crispy form %}
+    <p><a href="{% url "password_reset" %}">Forgot your password?</a></p>
 {% endif %}
 
 {% endblock %}
