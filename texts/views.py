@@ -11,6 +11,7 @@ from texts.forms import ContactForm, SearchTextsForm, TextForm, LoginForm, \
     AuthorForm, UserCreationMailForm
 from django.views.generic import CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
 from django.core.mail import mail_admins, send_mail
@@ -28,6 +29,30 @@ class TextList(ListView):
     context_object_name = "texts"
     template_name = make_template_name("texts")
     paginate_by = 6
+
+
+def highlighted_texts(request):
+    # todo: update urls
+    text_titles = [
+        "A Cicada",
+        "Toward the Temple of Heaped Fragrance",
+        "On a Moonlight Night",
+        "Drinking Alone with the Moon",
+        "A Spring Morning",
+        "Drinking Wine",
+        "The Yellow Crane Terrace",
+    ]
+    try:
+        # fetch the highlighted texts
+        highlighted_texts = [Text.objects.get(title_english=text_title)
+                             for text_title in text_titles]
+    except ObjectDoesNotExist, error:
+        print "Failed to find some of the highlighted texts"
+        # just take a few late texts
+        highlighted_texts = \
+            Text.objects.order_by('chars_data')[:len(text_titles)]
+    return render(request, make_template_name("highlighted_texts"), locals())
+
 
 
 class ReadText(DetailView):

@@ -21,7 +21,7 @@ def create_text():
         )
 
 
-class QuestionViewTests(TestCase):
+class AllViewsTests(TestCase):
 
     def test_all_views_work(self):
 
@@ -37,6 +37,7 @@ class QuestionViewTests(TestCase):
         print "IDs:", text_id, author_id
 
         view_adresses_dict = {
+            "highlighted_texts": None,
             "texts_list": None,
             "read_text": text_id,
             "authors": None,

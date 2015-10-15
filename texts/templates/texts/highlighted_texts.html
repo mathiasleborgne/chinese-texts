@@ -2,10 +2,17 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
-<h1>All texts</h1>
+<h1>SteleForest: bilingual Chinese texts</h1>
+<p class="home-text">Welcome to Stele Forest{% if user.is_authenticated %} {{ user.username }}{% endif %}!
+   Here you will find some classical chinese texts, displayed in a pretty bilingual Chinese-English format.
+   You can even <a href="{% url "new_text" %}">add your own texts</a>!
+</p>
+
+<p class="home-text">Here is a small selection of texts (you can see all texts <a href="{% url "texts_list" %}">here</a>).
+</p>
 
 <ul class="list-group">
-{% for text in texts %}
+{% for text in highlighted_texts %}
     <li class="list-group-item clearfix">
         <h3 class="list-group-item-heading">
             <a href="{% url "read_text" text.id %}">{{ text.title_english }}</a>
@@ -25,24 +32,6 @@
     <p>No text to display</p>
 {% endfor %}
 </ul>
-
-{% if is_paginated %}
-    <nav>
-      <ul class="pager">
-       {% if page_obj.has_previous %}
-        <li class="previous"><a href="?page={{ page_obj.previous_page_number }}"><span aria-hidden="true">&larr;</span>Previous</a></li>
-       {% else %}
-        <li class="previous disabled"><a href="#"><span aria-hidden="true">&larr;</span>Previous</a></li>
-       {% endif %}
-       {% if page_obj.has_next %}
-        <li class="next"><a href="?page={{ page_obj.next_page_number }}">Next<span aria-hidden="true">&rarr;</span></a></li>
-       {% else %}
-        <li class="next disabled"><a href="#"><span aria-hidden="true">&rarr;</span>Next</a></li>
-       {% endif %}
-      </ul>
-    </nav>
-{% endif %}
-
 
 
 {% endblock %}

@@ -26,7 +26,8 @@ from texts.views import TextList, ReadText, TextUpdate, TextCreate, \
 
 urlpatterns = patterns(
     'texts.views',
-    url(r'^$', TextList.as_view(), name='texts_list'),
+    url(r'^$', 'highlighted_texts', name="highlighted_texts"),
+    url(r'^texts-list$', TextList.as_view(), name='texts_list'),
     url(r'^text/(?P<pk>\d+)$', ReadText.as_view(), name='read_text'),
     url(r'^authors$', AuthorList.as_view(), name='authors'),
     url(r'^author-page/(?P<pk>\d+)$', AuthorView.as_view(), name='author_page'),
