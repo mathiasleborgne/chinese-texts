@@ -125,13 +125,25 @@ class TextScraper(object):
         print "current text:", self.text
 
     def get_text_metadata(self):
+        text_candidates = self.try_get_texts_in_db()
+        if len(text_candidates) > 0:
+            text_candidate = text_candidates[0]
+            if text_candidate.chars_data is None or not \
+                    text_candidate.check_lines():
+                print "Ok, text", self.title_english, \
+                    "has no metadata, fetching them!"
+            elif self.args.metadata_only:
+                print "Already found metadata for text", self.title_english, \
+                    "> not recomputing them"
+                return
         metadata_parser = MetadataParser(self.text, None, args)
         metadata_parser.make_metadata()
 
 
     def add_text_to_db(self):
-        texts = Text.objects.filter(title_english=self.title_english)
-        if texts and self.args.preserve_db:
+        texts = self.try_get_texts_in_db()
+        if texts and \
+                (self.args.preserve_db or self.args.metadata_only):
             print "Not replacing text:", self.title_english
             return
         else:
@@ -143,6 +155,8 @@ class TextScraper(object):
                 print "DB error, couldn't save text:", self.title_english, \
                     "-", error
 
+    def try_get_texts_in_db(self):
+        return Text.objects.filter(title_english=self.title_english)
 
 
 class ZhuangScraper(TextScraper):
@@ -416,6 +430,10 @@ def get_texts_parser():
     parser.add_argument("--no_metadata",
                         action="store_true",
                         help="Don't collect metadata")
+    parser.add_argument("--metadata_only",
+                        action="store_true",
+                        help="Don't re-fetch metadata for texts that already "
+                             "have some")
     return parser
 
 

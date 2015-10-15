@@ -13,7 +13,7 @@ def get_parser():
                         help="Don't actually change the database")
     parser.add_argument("--preserve_db",
                         action="store_true",
-                        help="Anly re-fetch data for texts without data")
+                        help="Only re-fetch data for texts without data")
     parser.add_argument("--few_characters",
                         action="store_true",
                         help="Get only a few characters from the texts")
