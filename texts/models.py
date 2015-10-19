@@ -1,11 +1,13 @@
 #-*- coding: utf-8 -*-
 
+import operator
+import json
+import itertools
 from django.db import models
 from django.db.models import Q
 from django.contrib.auth.models import User
-import operator
-import json
 from django.dispatch import receiver
+from django.template.defaultfilters import slugify
 from texts.text_processing import check_process_text
 from texts.char_data import CharData, get_unicode
 
@@ -27,6 +29,7 @@ class Text(models.Model):
     # see explanation for JSON serialization here:
     # http://stackoverflow.com/questions/1110153/what-is-the-most-efficent-way-to-store-a-list-in-the-django-models
     view_count = models.PositiveIntegerField(default=0)
+    slug = models.SlugField(null=True)
 
 
     class Meta:
@@ -134,11 +137,22 @@ class Text(models.Model):
         else:
             super(Text, self).save(*args, **kwargs)
 
+    def make_slug(self):
+        self.slug = make_slug(self, self.title_english, Text)
+
     def save_no_parsing(self):
         """ every generic save will run the characters parsing, so we can
             use this function to avoid it
         """
+        if not self.id:
+            self.make_slug()
         super(Text, self).save()
+
+    def save_override_slug(self, *args, **kwargs):
+        self.slug = None
+        self.make_slug()
+        self.save_no_parsing(*args, **kwargs)
+
 
 class TextLine(object):
     """docstring for TextLine"""
@@ -176,6 +190,7 @@ class Author(models.Model):
     year_birth = models.CharField(null=True, max_length=100)
     year_death = models.CharField(null=True, max_length=100)
     biography = models.TextField(null=True)
+    slug = models.SlugField(null=True)
 
     def __str__(self):
         # todo replace by name_chinese
@@ -183,6 +198,32 @@ class Author(models.Model):
 
     def count_texts(self):
         return len(Text.objects.filter(author__name_chinese=self.name_chinese))
+
+    def make_slug(self):
+        self.slug = make_slug(self, self.name_pinyin, Author)
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.make_slug()
+        super(Author, self).save(*args, **kwargs)
+
+    def save_override_slug(self, *args, **kwargs):
+        self.slug = None
+        self.make_slug()
+        self.save(*args, **kwargs)
+
+
+def make_slug(instance, data_slugify, class_data):
+    max_length = class_data._meta.get_field('slug').max_length
+    slug_unnumbered = slugify(data_slugify)
+    slug_numbered = slug_unnumbered
+    for number_slug in itertools.count(1):
+        if not class_data.objects.filter(slug=slug_numbered).exists():
+            break
+        index_truncate = max_length - len(str(number_slug)) - 1
+        slug_numbered = "%s-%d" % (slug_unnumbered[:index_truncate],
+                                   number_slug)
+    return slug_numbered
 
 
 class Profile(models.Model):
