@@ -29,7 +29,7 @@ class Text(models.Model):
     # see explanation for JSON serialization here:
     # http://stackoverflow.com/questions/1110153/what-is-the-most-efficent-way-to-store-a-list-in-the-django-models
     view_count = models.PositiveIntegerField(default=0)
-    slug = models.SlugField(null=True)
+    slug = models.SlugField(null=True, max_length=50)
 
 
     class Meta:
@@ -190,7 +190,7 @@ class Author(models.Model):
     year_birth = models.CharField(null=True, max_length=100)
     year_death = models.CharField(null=True, max_length=100)
     biography = models.TextField(null=True)
-    slug = models.SlugField(null=True)
+    slug = models.SlugField(null=True, max_length=50)
 
     def __str__(self):
         # todo replace by name_chinese
