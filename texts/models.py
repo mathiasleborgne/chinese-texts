@@ -29,7 +29,7 @@ class Text(models.Model):
     # see explanation for JSON serialization here:
     # http://stackoverflow.com/questions/1110153/what-is-the-most-efficent-way-to-store-a-list-in-the-django-models
     view_count = models.PositiveIntegerField(default=0)
-    slug = models.SlugField(null=True, max_length=50)
+    slug = models.SlugField(null=True, max_length=42)
 
 
     class Meta:
@@ -190,7 +190,7 @@ class Author(models.Model):
     year_birth = models.CharField(null=True, max_length=100)
     year_death = models.CharField(null=True, max_length=100)
     biography = models.TextField(null=True)
-    slug = models.SlugField(null=True, max_length=50)
+    slug = models.SlugField(null=True, max_length=30)
 
     def __str__(self):
         # todo replace by name_chinese
@@ -217,12 +217,15 @@ def make_slug(instance, data_slugify, class_data):
     max_length = class_data._meta.get_field('slug').max_length
     slug_unnumbered = slugify(data_slugify)
     slug_numbered = slug_unnumbered
+    print "Making slug: raw =", slug_unnumbered, "(max_length=", max_length,")"
     for number_slug in itertools.count(1):
         if not class_data.objects.filter(slug=slug_numbered).exists():
             break
         index_truncate = max_length - len(str(number_slug)) - 1
         slug_numbered = "%s-%d" % (slug_unnumbered[:index_truncate],
                                    number_slug)
+    if slug_numbered != slug_unnumbered:
+        print "Making slug: raw =", slug_numbered
     return slug_numbered
 
 
