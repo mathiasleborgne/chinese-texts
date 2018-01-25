@@ -1,5 +1,5 @@
 {
-	"word_wrap": true,
+	"word_wrap": false,
 	"auto_complete": true,
 	"auto_complete_with_fields": true,
 	"bold_folder_labels": false,
