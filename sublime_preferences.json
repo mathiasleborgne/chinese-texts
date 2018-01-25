@@ -1,0 +1,20 @@
+{
+	"word_wrap": true,
+	"auto_complete": true,
+	"auto_complete_with_fields": true,
+	"bold_folder_labels": false,
+	"default_encoding": "UTF-8",
+	"detect_indentation": true,
+	"font_face": "Menlo",
+	"font_options":
+	[
+		"subpixel_antialias"
+	],
+	"font_size": 22.0,
+	"highlight_line": true,
+	"highlight_modified_tabs": true,
+	"line_padding_bottom": 1,
+	"tab_size": 4,
+	"translate_tabs_to_spaces": true,
+	"trim_trailing_white_space_on_save": true
+}
